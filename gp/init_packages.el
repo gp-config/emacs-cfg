@@ -85,6 +85,7 @@
             "wv" 'evil-window-vnew
             "wh" 'evil-window-new
             ;; h - HELP
+	    ;; h d - HELP > DESCRIBE
             "hdv" 'counsel-describe-variable
             "hdf" 'counsel-describe-function
             "hdk" 'describe-key
@@ -146,9 +147,12 @@
   :defer t
   :init (progn
 	  (which-key-mode)
-          (which-key-add-key-based-replacements ",f" "Files")
-          (which-key-add-key-based-replacements ",h" "Help")
-          (which-key-add-key-based-replacements ",hd" "Help - Describe")))
+          (which-key-add-key-based-replacements ",b" "Buffers...")
+          (which-key-add-key-based-replacements ",s" "Splits...")
+          (which-key-add-key-based-replacements ",f" "Files...")
+          (which-key-add-key-based-replacements ",w" "Window...")
+          (which-key-add-key-based-replacements ",h" "Help...")
+          (which-key-add-key-based-replacements ",hd" "Describe...")))
 
 (use-package hl-todo
   :ensure t
