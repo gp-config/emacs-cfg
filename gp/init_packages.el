@@ -49,43 +49,46 @@
 (use-package general
   :ensure t
   :config (progn
-            ; (general-evil-setup t) ; creates vim-like key binding functions (eg imap)
-            ;; familiar shortcuts to comment things out
-            (global-set-key (kbd "C-\/") 'evil-commentary-line)
-            (global-set-key (kbd "C-S-\/") 'evil-commentary)
-            ;; some movement keys
-            (global-set-key (kbd "C-h") 'evil-window-left)
-            (global-set-key (kbd "C-j") 'evil-window-down)
-            (global-set-key (kbd "C-k") 'evil-window-up)
-            (global-set-key (kbd "C-l") 'evil-window-right)
-            ;; general keys
-            (general-define-key
-            :states '(normal motion insert emacs)
+        ;; different states get different general-define-key blocks
+        ;; eg, we dont want the , leader key to be active in insert mode
+	    ;; ============= GENERAL KEYS - MISC =============
+        (general-define-key
+          :states '(normal motion emacs insert)
+          "C-h" 'evil-window-left
+          "C-j" 'evil-window-down
+          "C-k" 'evil-window-up
+          "C-l" 'evil-window-right)
+        ;; ============= GENERAL KEYS - VIM =============
+        ;; COMMA LEADER
+        (general-define-key
+            :states '(normal motion emacs)
             :prefix ","
-            ;; HELP
-            "hdv" 'counsel-describe-variable
-            "hdf" 'counsel-describe-function
-            "hdk" 'describe-key
-            
-            ;; FILES
-            "ff" 'counsel-find-file
-            
-            ;; SPLITS (with prefix)
-            "sv" 'evil-window-vsplit
-            "sh" 'evil-window-split
-            ;; SPLITS (shortcuts)
+            ;; SHORTCUTS (misc keys, not inside a "menu")
             "v" 'evil-window-vsplit
-            
-            ; BUFFERS (with prefix)
-            "bd" 'kill-buffer
-            "bb" 'switch-to-buffer
-            "bn" 'next-buffer
-            "bp" 'previous-buffer)
-            ; BUFFERS (shortcuts)
             "c" 'kill-this-buffer
             "q" 'next-buffer
             "z" 'previous-buffer
-            ))
+            ;; MENUS - <leader><menu key> enters a "menu"
+            ;; b - BUFFERS
+            "bd" 'kill-buffer
+            "bb" 'switch-to-buffer
+            "bn" 'next-buffer
+            "bp" 'previous-buffer
+            ;; s - SPLITS
+            "sv" 'evil-window-vsplit
+            "sh" 'evil-window-split
+            ;; f - FILES
+            "ff" 'counsel-find-file
+            ;; w - WINDOW
+            "wd" 'evil-window-delete
+            "wc" 'evil-window-delete
+            "wv" 'evil-window-vnew
+            "wh" 'evil-window-new
+            ;; h - HELP
+            "hdv" 'counsel-describe-variable
+            "hdf" 'counsel-describe-function
+            "hdk" 'describe-key
+            )))
 
 (use-package evil-escape
   :ensure t
@@ -106,11 +109,11 @@
           ;; (setq powerline-default-separator 'brace)
           ;; (setq powerline-default-separator 'butt)
           ;; (setq powerline-default-separator 'chamfer)
-          ;; (setq powerline-default-separator 'contour)
+          (setq powerline-default-separator 'contour)
           ;; (setq powerline-default-separator 'curve)
           ;; (setq powerline-default-separator 'rounded)
           ;; (setq powerline-default-separator 'roundstub)
-          (setq powerline-default-separator 'slant)
+          ;; (setq powerline-default-separator 'slant)
           ;; (setq powerline-default-separator 'wave)
           ;; (setq powerline-default-separator 'zigzag)
           ;; (setq powerline-default-separator 'nil)

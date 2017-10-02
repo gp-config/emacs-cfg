@@ -1,7 +1,7 @@
 ;; EMACS INIT
 
 ;; open backtrace buffer when something goes wrong
-; (set 'debug-on-error t)
+(set 'debug-on-error t)
 
 ;; dont load outdated byte code
 (setq load-prefer-newer t)
@@ -16,7 +16,7 @@
 ;; create directory if it doesnt exist
 (unless (file-exists-p dir-file-backups) (make-directory dir-file-backups))
 ;; set configuration
-(setq auto-save-list-file-name (concat dir-file-backups "auto-save-list"))
+(setq auto-save-list-file-name (concat dir-file-backups "/auto-save-list"))
 (setq
  backup-directory-alist `(("." . ,dir-file-backups))
  backup-by-copying t
@@ -35,6 +35,11 @@
 (setq custom-file custom-file-path)
 (load custom-file)
 
+;; stop dired creating new buffers when entering directories
+(require 'dired)
+(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+(put 'dired-find-alternate-file 'disabled nil)
+
 ;; expose gp/ init files
 (add-to-list 'load-path (concat user-emacs-directory "gp"))
 
@@ -46,4 +51,3 @@
 (add-hook 'emacs-startup-hook 'gp_init_themes)
 
 ;; end
-
