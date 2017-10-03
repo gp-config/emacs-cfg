@@ -13,7 +13,6 @@
   (file-exists-p "~/.emacs.d/elpa/archives/melpa")
   (file-exists-p "~/.emacs.d/elpa/archives/melpa-stable"))
 	(package-refresh-contents))
-
 ;; evaluate the package list and install missing packages
 (defun packages-install (&rest packages)
   ; (message "running packages-install")
@@ -110,11 +109,11 @@
           ;; (setq powerline-default-separator 'brace)
           ;; (setq powerline-default-separator 'butt)
           ;; (setq powerline-default-separator 'chamfer)
-          (setq powerline-default-separator 'contour)
+          ;; (setq powerline-default-separator 'contour)
           ;; (setq powerline-default-separator 'curve)
           ;; (setq powerline-default-separator 'rounded)
           ;; (setq powerline-default-separator 'roundstub)
-          ;; (setq powerline-default-separator 'slant)
+          (setq powerline-default-separator 'slant)
           ;; (setq powerline-default-separator 'wave)
           ;; (setq powerline-default-separator 'zigzag)
           ;; (setq powerline-default-separator 'nil)
@@ -124,6 +123,7 @@
   :ensure t
   :config (progn
 	    (load-theme 'airline-wombat t)))
+	    ;; (load-theme 'airline-papercolor t)))
 
 (use-package evil-commentary
   :ensure t
@@ -158,5 +158,25 @@
   :ensure t
   :defer t
   :init (global-hl-todo-mode))
+
+(use-package highlight-indent-guides
+  :ensure t
+  :defer t
+  :init (setq highlight-indent-guides-method 'character))
+
+;; function to load rainbow delimiters
+(defun enable-rainbow-delims ()
+    (use-package rainbow-delimiters
+    :ensure t
+    :init (rainbow-delimiters-mode)))
+
+;; don't load the rainbow delims package until we open a lisp or elisp file
+(add-hook 'lisp-mode-hook 'enable-rainbow-delims)
+(add-hook 'emacs-lisp-mode-hook 'enable-rainbow-delims)
+
+(use-package tabbar
+  :ensure t
+  :defer t
+  :init (tabbar-mode))
 
 (provide 'init_packages)

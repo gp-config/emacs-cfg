@@ -35,9 +35,18 @@
 (setq custom-file custom-file-path)
 (load custom-file)
 
+;; use spaces instead of tabs
+(setq-default indent-tabs-mode nil)
+
+;; match braces, parens, quotes etc
+(electric-pair-mode)
+; and highlight them
+(show-paren-mode)
+
 ;; stop dired creating new buffers when entering directories
 (require 'dired)
 (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+(define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))
 (put 'dired-find-alternate-file 'disabled nil)
 
 ;; expose gp/ init files
