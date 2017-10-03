@@ -43,6 +43,9 @@
 ; and highlight them
 (show-paren-mode)
 
+; highlight current line
+(hl-line-mode)
+
 ;; stop dired creating new buffers when entering directories
 (require 'dired)
 (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
@@ -51,6 +54,10 @@
 
 ;; expose gp/ init files
 (add-to-list 'load-path (concat user-emacs-directory "gp"))
+
+;; load helper functions
+;; do this before loading other init files, as they might depend on helper functions
+(require 'init_helpers)
 
 ;; set up packages
 (require 'init_packages)

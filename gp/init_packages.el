@@ -78,6 +78,7 @@
             "sh" 'evil-window-split
             ;; f - FILES
             "ff" 'counsel-find-file
+            "fc" '(lambda () (interactive) (load-directory "~/.emacs.d"))
             ;; w - WINDOW
             "wd" 'evil-window-delete
             "wc" 'evil-window-delete
@@ -119,11 +120,13 @@
           ;; (setq powerline-default-separator 'nil)
           ))
 
-(use-package airline-themes
-  :ensure t
-  :config (progn
-	    (load-theme 'airline-wombat t)))
-	    ;; (load-theme 'airline-papercolor t)))
+;; this package adds a lot to emacs boot time
+;; commenting it out for now
+;; (use-package airline-themes
+;;   :ensure t
+;;   :config (progn
+;; 	    (load-theme 'airline-wombat t)))
+;; 	    ;; (load-theme 'airline-papercolor t)))
 
 (use-package evil-commentary
   :ensure t
@@ -150,6 +153,7 @@
           (which-key-add-key-based-replacements ",b" "Buffers...")
           (which-key-add-key-based-replacements ",s" "Splits...")
           (which-key-add-key-based-replacements ",f" "Files...")
+          (which-key-add-key-based-replacements ",fc" "Edit Emacs configuration files")
           (which-key-add-key-based-replacements ",w" "Window...")
           (which-key-add-key-based-replacements ",h" "Help...")
           (which-key-add-key-based-replacements ",hd" "Describe...")))
@@ -169,7 +173,6 @@
     (use-package rainbow-delimiters
     :ensure t
     :init (rainbow-delimiters-mode)))
-
 ;; don't load the rainbow delims package until we open a lisp or elisp file
 (add-hook 'lisp-mode-hook 'enable-rainbow-delims)
 (add-hook 'emacs-lisp-mode-hook 'enable-rainbow-delims)
