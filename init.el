@@ -8,7 +8,6 @@
 
 ;; this line must exist; do not remove
 (package-initialize)
-
 ;; configure auto file backups
 ;; set a variable for convenience
 (defvar dir-file-backups (concat user-emacs-directory "file_backups"))
@@ -51,6 +50,21 @@
 (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
 (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))
 (put 'dired-find-alternate-file 'disabled nil)
+
+;; scroll settings
+(setq mouse-wheel-scroll-amount '(3)) ;; three lines at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+;; (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+;; (setq scroll-conservatively 101) ;; move minimum when cursor exits view, instead of recentering
+;; (setq scroll-step 1) ;; keyboard scroll one line at a time
+
+;; enable line numbers
+(global-linum-mode)
+;; add a bit of spacing around line numbers
+(setq linum-format " %d ")
+
+;; enable line highlight
+(global-hl-line-mode)
 
 ;; expose gp/ init files
 (add-to-list 'load-path (concat user-emacs-directory "gp"))

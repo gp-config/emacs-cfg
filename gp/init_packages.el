@@ -48,15 +48,17 @@
 (use-package general
   :ensure t
   :config (progn
+        ;; KEY BINDS
         ;; different states get different general-define-key blocks
         ;; eg, we dont want the , leader key to be active in insert mode
-	    ;; ============= GENERAL KEYS - MISC =============
+        ;; ============= GENERAL KEYS - MISC =============
         (general-define-key
           :states '(normal motion emacs insert)
           "C-h" 'evil-window-left
           "C-j" 'evil-window-down
           "C-k" 'evil-window-up
-          "C-l" 'evil-window-right)
+          "C-l" 'evil-window-right
+          "C-p" 'switch-to-buffer)
         ;; ============= GENERAL KEYS - VIM =============
         ;; COMMA LEADER
         (general-define-key
@@ -77,17 +79,21 @@
             "sv" 'evil-window-vsplit
             "sh" 'evil-window-split
             ;; f - FILES
-            "ff" 'counsel-find-file
+            "ff" 'find-file
             "fc" '(lambda () (interactive) (load-directory "~/.emacs.d"))
             ;; w - WINDOW
             "wd" 'evil-window-delete
             "wc" 'evil-window-delete
             "wv" 'evil-window-vnew
             "wh" 'evil-window-new
+            ;; t - UI TOGGLES
+            "tn" 'global-linum-mode
+            "th" 'hl-line-mode
+            "tw" 'toggle-truncate-lines
             ;; h - HELP
 	    ;; h d - HELP > DESCRIBE
-            "hdv" 'counsel-describe-variable
-            "hdf" 'counsel-describe-function
+            "hdv" 'describe-variable
+            "hdf" 'describe-function
             "hdk" 'describe-key
             )))
 
@@ -97,28 +103,28 @@
   :init (evil-escape-mode)
   :config (setq-default evil-escape-key-sequence "kj"))
 
-(use-package powerline
-  :ensure t
-  :init (progn
-          (powerline-default-theme)
-          ; previews of separators: http://spacemacs.org/doc/DOCUMENTATION.html#mode-line
-          ;; (setq powerline-default-separator 'alternate)
-          ;; (setq powerline-default-separator 'arrow)
-          ;; (setq powerline-default-separator 'arrow-fade)
-          ;; (setq powerline-default-separator 'bar)
-          ;; (setq powerline-default-separator 'box)
-          ;; (setq powerline-default-separator 'brace)
-          ;; (setq powerline-default-separator 'butt)
-          ;; (setq powerline-default-separator 'chamfer)
-          ;; (setq powerline-default-separator 'contour)
-          ;; (setq powerline-default-separator 'curve)
-          ;; (setq powerline-default-separator 'rounded)
-          ;; (setq powerline-default-separator 'roundstub)
-          (setq powerline-default-separator 'slant)
-          ;; (setq powerline-default-separator 'wave)
-          ;; (setq powerline-default-separator 'zigzag)
-          ;; (setq powerline-default-separator 'nil)
-          ))
+;; (use-package powerline
+;;   :ensure t
+;;   :init (progn
+;;           (powerline-default-theme)
+;;           ; previews of separators: http://spacemacs.org/doc/DOCUMENTATION.html#mode-line
+;;           ;; (setq powerline-default-separator 'alternate)
+;;           ;; (setq powerline-default-separator 'arrow)
+;;           ;; (setq powerline-default-separator 'arrow-fade)
+;;           ;; (setq powerline-default-separator 'bar)
+;;           ;; (setq powerline-default-separator 'box)
+;;           ;; (setq powerline-default-separator 'brace)
+;;           ;; (setq powerline-default-separator 'butt)
+;;           ;; (setq powerline-default-separator 'chamfer)
+;;           ;; (setq powerline-default-separator 'contour)
+;;           ;; (setq powerline-default-separator 'curve)
+;;           ;; (setq powerline-default-separator 'rounded)
+;;           ;; (setq powerline-default-separator 'roundstub)
+;;           (setq powerline-default-separator 'slant)
+;;           ;; (setq powerline-default-separator 'wave)
+;;           ;; (setq powerline-default-separator 'zigzag)
+;;           ;; (setq powerline-default-separator 'nil)
+;;           ))
 
 ;; this package adds a lot to emacs boot time
 ;; commenting it out for now
@@ -132,10 +138,6 @@
   :ensure t
   :defer t
   :init (evil-commentary-mode))
-
-(use-package counsel
-  :ensure t
-  :defer t)
 
 (use-package ivy
   :ensure t
@@ -155,6 +157,10 @@
           (which-key-add-key-based-replacements ",f" "Files...")
           (which-key-add-key-based-replacements ",fc" "Edit Emacs configuration files")
           (which-key-add-key-based-replacements ",w" "Window...")
+          (which-key-add-key-based-replacements ",t" "UI/Visual Toggles...")
+          (which-key-add-key-based-replacements ",tn" "Line Numbers (Toggle)")
+          (which-key-add-key-based-replacements ",th" "Highlight Current Line (Toggle)")
+          (which-key-add-key-based-replacements ",tw" "Word Wrap (Toggle)")
           (which-key-add-key-based-replacements ",h" "Help...")
           (which-key-add-key-based-replacements ",hd" "Describe...")))
 
