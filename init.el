@@ -66,6 +66,12 @@
 ;; enable line highlight
 (global-hl-line-mode)
 
+;; disable fringes by default (use set-fringe-style command to change it within a session)
+(set-fringe-style 0)
+
+;; disable cursor blinking by default
+(blink-cursor-mode)
+
 ;; expose gp/ init files
 (add-to-list 'load-path (concat user-emacs-directory "gp"))
 
@@ -75,6 +81,11 @@
 
 ;; set up packages
 (require 'init_packages)
+
+;; expose gp/plugins files
+(add-to-list 'load-path (concat user-emacs-directory "gp/plugins"))
+(require 'session)
+
 
 ;; set up themes and ui options once we're done starting up
 (require 'init_themes)

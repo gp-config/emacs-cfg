@@ -58,6 +58,17 @@
           "C-j" 'evil-window-down
           "C-k" 'evil-window-up
           "C-l" 'evil-window-right
+          ;; ctrl+shift+enter to insert line above
+          "C-S-<return>" '(lambda () (interactive)
+                        (previous-line)
+                        (end-of-line)
+                        (newline-and-indent))
+          "C-<return>" '(lambda () (interactive)
+                          (end-of-line)
+                          (newline-and-indent)))
+        ;; ============= GENERAL KEYS - MISC - NO INSERT MODE =============
+        (general-define-key
+         :states '(normal motion emacs)
           "C-p" 'switch-to-buffer)
         ;; ============= GENERAL KEYS - VIM =============
         ;; COMMA LEADER
@@ -69,17 +80,20 @@
             "c" 'kill-this-buffer
             "q" 'next-buffer
             "z" 'previous-buffer
+            "x" 'execute-extended-command
             ;; MENUS - <leader><menu key> enters a "menu"
             ;; b - BUFFERS
             "bd" 'kill-buffer
             "bb" 'switch-to-buffer
             "bn" 'next-buffer
             "bp" 'previous-buffer
+            "bl" 'list-buffers
             ;; s - SPLITS
             "sv" 'evil-window-vsplit
             "sh" 'evil-window-split
             ;; f - FILES
             "ff" 'find-file
+            "fo" 'find-file
             "fc" '(lambda () (interactive) (load-directory "~/.emacs.d"))
             ;; w - WINDOW
             "wd" 'evil-window-delete
@@ -103,28 +117,28 @@
   :init (evil-escape-mode)
   :config (setq-default evil-escape-key-sequence "kj"))
 
-;; (use-package powerline
-;;   :ensure t
-;;   :init (progn
-;;           (powerline-default-theme)
-;;           ; previews of separators: http://spacemacs.org/doc/DOCUMENTATION.html#mode-line
-;;           ;; (setq powerline-default-separator 'alternate)
-;;           ;; (setq powerline-default-separator 'arrow)
-;;           ;; (setq powerline-default-separator 'arrow-fade)
-;;           ;; (setq powerline-default-separator 'bar)
-;;           ;; (setq powerline-default-separator 'box)
-;;           ;; (setq powerline-default-separator 'brace)
-;;           ;; (setq powerline-default-separator 'butt)
-;;           ;; (setq powerline-default-separator 'chamfer)
-;;           ;; (setq powerline-default-separator 'contour)
-;;           ;; (setq powerline-default-separator 'curve)
-;;           ;; (setq powerline-default-separator 'rounded)
-;;           ;; (setq powerline-default-separator 'roundstub)
-;;           (setq powerline-default-separator 'slant)
-;;           ;; (setq powerline-default-separator 'wave)
-;;           ;; (setq powerline-default-separator 'zigzag)
-;;           ;; (setq powerline-default-separator 'nil)
-;;           ))
+(use-package powerline
+  :ensure t
+  :init (progn
+          (powerline-default-theme)
+          ; previews of separators: http://spacemacs.org/doc/DOCUMENTATION.html#mode-line
+          ;; (setq powerline-default-separator 'alternate)
+          ;; (setq powerline-default-separator 'arrow)
+          ;; (setq powerline-default-separator 'arrow-fade)
+          ;; (setq powerline-default-separator 'bar)
+          ;; (setq powerline-default-separator 'box)
+          ;; (setq powerline-default-separator 'brace)
+          ;; (setq powerline-default-separator 'butt)
+          ;; (setq powerline-default-separator 'chamfer)
+          ;; (setq powerline-default-separator 'contour)
+          ;; (setq powerline-default-separator 'curve)
+          ;; (setq powerline-default-separator 'rounded)
+          ;; (setq powerline-default-separator 'roundstub)
+          (setq powerline-default-separator 'slant)
+          ;; (setq powerline-default-separator 'wave)
+          ;; (setq powerline-default-separator 'zigzag)
+          ;; (setq powerline-default-separator 'nil)
+          ))
 
 ;; this package adds a lot to emacs boot time
 ;; commenting it out for now
@@ -182,10 +196,5 @@
 ;; don't load the rainbow delims package until we open a lisp or elisp file
 (add-hook 'lisp-mode-hook 'enable-rainbow-delims)
 (add-hook 'emacs-lisp-mode-hook 'enable-rainbow-delims)
-
-(use-package tabbar
-  :ensure t
-  :defer t
-  :init (tabbar-mode))
 
 (provide 'init_packages)
