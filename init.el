@@ -1,10 +1,14 @@
 ;; EMACS INIT
 
 ;; open backtrace buffer when something goes wrong
-(set 'debug-on-error t)
+;; (set 'debug-on-error t)
 
 ;; dont load outdated byte code
 (setq load-prefer-newer t)
+
+;; initial messages
+(setq inhibit-startup-message t)
+(setq initial-scratch-message "")
 
 ;; this line must exist; do not remove
 (package-initialize)
@@ -79,16 +83,21 @@
 ;; do this before loading other init files, as they might depend on helper functions
 (require 'init_helpers)
 
-;; set up packages
-(require 'init_packages)
+;; load themes, set mode line right away
+(require 'init_themes)
+(gp-set-mode-line)
 
 ;; expose gp/plugins files
 (add-to-list 'load-path (concat user-emacs-directory "gp/plugins"))
+
+;; load session plugin
 (require 'session)
 
+;; set up packages
+(require 'init_packages)
 
 ;; set up themes and ui options once we're done starting up
-(require 'init_themes)
-(add-hook 'emacs-startup-hook 'gp_init_themes)
+;; (add-hook 'emacs-startup-hook 'gp_init_themes)
+(add-hook 'emacs-startup-hook (gp-init-themes))
 
 ;; end

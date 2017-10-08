@@ -1,8 +1,27 @@
 ;; set up themes dir
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "gp/themes/"))
 
+(defun gp-set-mode-line ()
+  (column-number-mode)
+  (setq
+    evil-normal-state-tag " N"
+    evil-insert-state-tag " I"
+    evil-visual-state-tag " V")
+  (setq mode-line-position '((line-number-mode ("%l" (column-number-mode ":%c")))))
+  (setq evil-mode-line-format '(before . mode-line-front-space))
+
+    (setq-default mode-line-format '("%e"
+        mode-line-front-space
+        evil-mode-line-tag
+        "/ "
+        mode-line-position
+        " / "
+        mode-line-buffer-identification
+        mode-line-end-spaces)))
+
+
 ;; called at emacs-startup-hook
-(defun gp_init_themes ()
+(defun gp-init-themes ()
   ;; disable bits of the interface
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
@@ -31,6 +50,6 @@
     mode-line ((t (:box nil :overline nil :underline nil :weight bold)))))
 
   ;; load theme
-  (load-theme 'nimbostratus-green t))
+  (load-theme 'nimbostratus-purp t))
 
 (provide 'init_themes)

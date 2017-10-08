@@ -40,11 +40,6 @@
 
 ;; ====================== install/load packages ====================== ;;
 
-(use-package evil
-  :ensure t
-  :init (evil-mode 1)
-  :config (define-key evil-normal-state-map "," nil))
-
 (use-package general
   :ensure t
   :config (progn
@@ -58,6 +53,7 @@
           "C-j" 'evil-window-down
           "C-k" 'evil-window-up
           "C-l" 'evil-window-right
+          "C-u" 'evil-scroll-up
           ;; ctrl+shift+enter to insert line above
           "C-S-<return>" '(lambda () (interactive)
                         (previous-line)
@@ -94,7 +90,8 @@
             ;; f - FILES
             "ff" 'find-file
             "fo" 'find-file
-            "fc" '(lambda () (interactive) (load-directory "~/.emacs.d"))
+            "fc" '(lambda () (interactive) (gp-session-load "config"))
+            "fed" '(lambda () (interactive) (gp-session-load "config"))
             ;; w - WINDOW
             "wd" 'evil-window-delete
             "wc" 'evil-window-delete
@@ -104,6 +101,10 @@
             "tn" 'global-linum-mode
             "th" 'hl-line-mode
             "tw" 'toggle-truncate-lines
+            ;; s - SESSION
+            "ss" 'gp-session-save
+            "so" 'gp-session-load
+            ;; "sa" ;; TODO: toggle session auto-save
             ;; h - HELP
 	    ;; h d - HELP > DESCRIBE
             "hdv" 'describe-variable
@@ -117,41 +118,50 @@
   :init (evil-escape-mode)
   :config (setq-default evil-escape-key-sequence "kj"))
 
-(use-package powerline
+(use-package evil
   :ensure t
-  :init (progn
-          (powerline-default-theme)
-          ; previews of separators: http://spacemacs.org/doc/DOCUMENTATION.html#mode-line
-          ;; (setq powerline-default-separator 'alternate)
-          ;; (setq powerline-default-separator 'arrow)
-          ;; (setq powerline-default-separator 'arrow-fade)
-          ;; (setq powerline-default-separator 'bar)
-          ;; (setq powerline-default-separator 'box)
-          ;; (setq powerline-default-separator 'brace)
-          ;; (setq powerline-default-separator 'butt)
-          ;; (setq powerline-default-separator 'chamfer)
-          ;; (setq powerline-default-separator 'contour)
-          ;; (setq powerline-default-separator 'curve)
-          ;; (setq powerline-default-separator 'rounded)
-          ;; (setq powerline-default-separator 'roundstub)
-          (setq powerline-default-separator 'slant)
-          ;; (setq powerline-default-separator 'wave)
-          ;; (setq powerline-default-separator 'zigzag)
-          ;; (setq powerline-default-separator 'nil)
-          ))
-
-;; this package adds a lot to emacs boot time
-;; commenting it out for now
-;; (use-package airline-themes
-;;   :ensure t
-;;   :config (progn
-;; 	    (load-theme 'airline-wombat t)))
-;; 	    ;; (load-theme 'airline-papercolor t)))
+  :init (evil-mode 1)
+  :config (define-key evil-normal-state-map "," nil))
 
 (use-package evil-commentary
   :ensure t
   :defer t
   :init (evil-commentary-mode))
+
+(defun gp-powerline-enable () (interactive)
+    (use-package powerline
+    :ensure t
+    :init (progn
+            ;; (my-powerline-theme)
+            ; previews of separators: http://spacemacs.org/doc/DOCUMENTATION.html#mode-line
+            ;; (setq powerline-default-separator 'alternate)
+            ;; (setq powerline-default-separator 'arrow)
+            ;; (setq powerline-default-separator 'arrow-fade)
+            ;; (setq powerline-default-separator 'bar)
+            ;; (setq powerline-default-separator 'box)
+            ;; (setq powerline-default-separator 'brace)
+            ;; (setq powerline-default-separator 'butt)
+            ;; (setq powerline-default-separator 'chamfer)
+            ;; (setq powerline-default-separator 'contour)
+            ;; (setq powerline-default-separator 'curve)
+            ;; (setq powerline-default-separator 'rounded)
+            ;; (setq powerline-default-separator 'roundstub)
+            (setq powerline-default-separator 'slant)
+            ;; (setq powerline-default-separator 'wave)
+            ;; (setq powerline-default-separator 'zigzag)
+            ;; (setq powerline-default-separator 'nil)
+                ;; this package adds a lot to emacs boot time
+                ;; commenting it out for now
+                (use-package airline-themes
+                :ensure t
+                :config (progn
+                            (powerline-default-theme)
+                            (load-theme 'airline-wombat t)
+                            (force-mode-line-update)
+                            (redraw-display)))
+                            ;; (load-theme 'airline-papercolor t)))
+            )
+  ))
 
 (use-package ivy
   :ensure t
