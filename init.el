@@ -50,12 +50,6 @@
 ;; switch modes if needed
 (setq-default indent-tabs-mode nil)
 
-;; use 2 spaces in el files
-(add-hook 'emacs-lisp-mode-hook (lambda ()
-                                  (setq tab-width 2)
-                                  (setq evil-shift-width 2)
-                                  (setq indent-tabs-mode nil)))
-
 ;; match braces, parens, quotes etc
 (electric-pair-mode)
 ; and highlight them
@@ -97,6 +91,15 @@
 ;; load helper functions
 ;; do this before loading other init files, as they might depend on helper functions
 (require 'init_helpers)
+
+;; use 2 spaces in el files
+(add-hook 'emacs-lisp-mode-hook (lambda ()
+                                  (setq tab-width 2)
+                                  (setq evil-shift-width 2)
+                                  (indent-use-spaces)))
+
+;; infer whether to use spaces or tabs in java
+(add-hook 'java-mode-hook 'indent-infer-spaces-or-tabs)
 
 ;; load themes, set mode line right away
 (require 'init_themes)
