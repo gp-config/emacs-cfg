@@ -40,9 +40,12 @@
 
 ;; ====================== install/load packages ====================== ;;
 
+;; use-package :init - run before package is loaded
+;; use-package :config - run after package is loaded
+
 (use-package general
   :ensure t
-  :config (progn
+  :config
         ;; KEY BINDS
         ;; different states get different general-define-key blocks
         ;; eg, we dont want the , leader key to be active in insert mode
@@ -65,7 +68,8 @@
         ;; ============= GENERAL KEYS - MISC - NO INSERT MODE =============
         (general-define-key
          :states '(normal motion emacs)
-          "C-p" 'switch-to-buffer)
+          ;; "C-p" 'switch-to-buffer)
+          "C-p" 'counsel-projectile)
         ;; ============= GENERAL KEYS - VIM =============
         ;; COMMA LEADER
         (general-define-key
@@ -101,6 +105,11 @@
             "tn" 'global-linum-mode
             "th" 'hl-line-mode
             "tw" 'toggle-truncate-lines
+            "tm" 'hidden-mode-line-mode
+            "ts" 'whitespace-mode
+            "tis" 'indent-use-spaces
+            "tit" 'indent-use-tabs
+            "tii" 'indent-infer-spaces-or-tabs
             ;; s - SESSION
             "ss" 'gp-session-save
             "so" 'gp-session-load
@@ -110,7 +119,7 @@
             "hdv" 'describe-variable
             "hdf" 'describe-function
             "hdk" 'describe-key
-            )))
+            ))
 
 (use-package evil-escape
   :ensure t
@@ -131,7 +140,7 @@
 (defun gp-powerline-enable () (interactive)
     (use-package powerline
     :ensure t
-    :init (progn
+    :init
             ;; (my-powerline-theme)
             ; previews of separators: http://spacemacs.org/doc/DOCUMENTATION.html#mode-line
             ;; (setq powerline-default-separator 'alternate)
@@ -154,39 +163,52 @@
                 ;; commenting it out for now
                 (use-package airline-themes
                 :ensure t
-                :config (progn
-                            (powerline-default-theme)
-                            (load-theme 'airline-wombat t)
-                            (force-mode-line-update)
-                            (redraw-display)))
+                :config
+                        (powerline-default-theme)
+                        (load-theme 'airline-wombat t)
+                        (force-mode-line-update)
+                        (redraw-display))
                             ;; (load-theme 'airline-papercolor t)))
-            )
-  ))
+            ))
 
 (use-package ivy
   :ensure t
   :defer t
-  :init (progn
-	  (ivy-mode 1)
-          (setq ivy-use-virtual-buffers t)
-          (setq enable-recursive-minibuffers t)))
+  :init
+        (ivy-mode 1)
+        (setq ivy-use-virtual-buffers t)
+        (setq enable-recursive-minibuffers t))
+
+(use-package counsel
+  :ensure t
+  :defer t)
+
+(use-package projectile
+  :ensure t
+  :defer t
+  :init
+  (use-package counsel-projectile
+    :ensure t)
+  :config
+    (projectile-global-mode)
+    (counsel-projectile-on))
 
 (use-package which-key
   :ensure t
   :defer t
-  :init (progn
-	  (which-key-mode)
-          (which-key-add-key-based-replacements ",b" "Buffers...")
-          (which-key-add-key-based-replacements ",s" "Splits...")
-          (which-key-add-key-based-replacements ",f" "Files...")
-          (which-key-add-key-based-replacements ",fc" "Edit Emacs configuration files")
-          (which-key-add-key-based-replacements ",w" "Window...")
-          (which-key-add-key-based-replacements ",t" "UI/Visual Toggles...")
-          (which-key-add-key-based-replacements ",tn" "Line Numbers (Toggle)")
-          (which-key-add-key-based-replacements ",th" "Highlight Current Line (Toggle)")
-          (which-key-add-key-based-replacements ",tw" "Word Wrap (Toggle)")
-          (which-key-add-key-based-replacements ",h" "Help...")
-          (which-key-add-key-based-replacements ",hd" "Describe...")))
+  :init
+        (which-key-mode)
+        (which-key-add-key-based-replacements ",b" "Buffers...")
+        (which-key-add-key-based-replacements ",s" "Splits...")
+        (which-key-add-key-based-replacements ",f" "Files...")
+        (which-key-add-key-based-replacements ",fc" "Edit Emacs configuration files")
+        (which-key-add-key-based-replacements ",w" "Window...")
+        (which-key-add-key-based-replacements ",t" "UI/Visual Toggles...")
+        (which-key-add-key-based-replacements ",tn" "Line Numbers (Toggle)")
+        (which-key-add-key-based-replacements ",th" "Highlight Current Line (Toggle)")
+        (which-key-add-key-based-replacements ",tw" "Word Wrap (Toggle)")
+        (which-key-add-key-based-replacements ",h" "Help...")
+        (which-key-add-key-based-replacements ",hd" "Describe..."))
 
 (use-package hl-todo
   :ensure t

@@ -1,23 +1,44 @@
 ;; set up themes dir
 (add-to-list 'custom-theme-load-path (concat user-emacs-directory "gp/themes/"))
 
-(defun gp-set-mode-line ()
-  (column-number-mode)
-  (setq
-    evil-normal-state-tag " N"
-    evil-insert-state-tag " I"
-    evil-visual-state-tag " V")
-  (setq mode-line-position '((line-number-mode ("%l" (column-number-mode ":%c")))))
-  (setq evil-mode-line-format '(before . mode-line-front-space))
+(defvar-local hidden-mode-line-mode nil)
+(define-minor-mode hidden-mode-line-mode
+  "Minor mode to hide the mode-line in the current buffer."
+  :init-value nil
+  :global t
+  :variable hidden-mode-line-mode
+  :group 'editing-basics
+  (if hidden-mode-line-mode
+    (progn
+      ;; set both -default and not, for current buffer AND global
+        (setq-default hide-mode-line mode-line-format mode-line-format nil)
+        (setq hide-mode-line mode-line-format mode-line-format nil))
+    ;; else
+    (progn
+      (setq-default mode-line-format hide-mode-line hide-mode-line nil)
+      (setq mode-line-format hide-mode-line hide-mode-line nil)))
+  (force-mode-line-update)
+  (redraw-display))
 
-    (setq-default mode-line-format '("%e"
-        mode-line-front-space
-        evil-mode-line-tag
-        "/ "
-        mode-line-position
-        " / "
-        mode-line-buffer-identification
-        mode-line-end-spaces)))
+(defun gp-set-mode-line () (interactive)
+    (column-number-mode)
+    (setq
+        evil-normal-state-tag " N"
+        evil-insert-state-tag " I"
+        evil-visual-state-tag " V")
+
+    (setq mode-line-position '((line-number-mode ("%l" (column-number-mode ":%c")))))
+    (setq evil-mode-line-format '(before . mode-line-front-space))
+
+        (setq-default mode-line-format '("%e"
+            mode-line-front-space
+            evil-mode-line-tag
+            "/ "
+            mode-line-position
+            " / "
+            mode-line-buffer-identification
+            mode-line-end-spaces))
+        (setq gp-mode-line-enabled t))
 
 
 ;; called at emacs-startup-hook
@@ -43,7 +64,7 @@
         (setq powerline-image-apple-rgb t))
 
   ;; set font face
-  (set-face-attribute 'default nil :font "Monaco-16")
+  (set-face-attribute 'default nil :font "Source Code Pro for Powerline" :weight 'Semibold)
 
   ;; remove 1px border around mode line
   (custom-set-faces '(

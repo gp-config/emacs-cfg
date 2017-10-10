@@ -38,15 +38,30 @@
 (setq custom-file custom-file-path)
 (load custom-file)
 
-;; use spaces instead of tabs
+;; require trailing newline on file load AND save
+(setq require-final-newline 'visit-save)
+
+;; tabs (and evil mode shifts) 4 spaces wide
+(setq-default tab-width 4)
+(setq-default evil-shift-width 4)
+
+;; use spaces instead of tabs by default
+;; use helpers/indent-infer-spaces-or-tabs or helpers/indent-use-tabs and indent-use-spaces to
+;; switch modes if needed
 (setq-default indent-tabs-mode nil)
+
+;; use 2 spaces in el files
+(add-hook 'emacs-lisp-mode-hook (lambda ()
+                                  (setq tab-width 2)
+                                  (setq evil-shift-width 2)
+                                  (setq indent-tabs-mode nil)))
 
 ;; match braces, parens, quotes etc
 (electric-pair-mode)
 ; and highlight them
 (show-paren-mode)
 
-; highlight current line
+;; highlight current line
 (hl-line-mode)
 
 ;; stop dired creating new buffers when entering directories
@@ -74,7 +89,7 @@
 (set-fringe-style 0)
 
 ;; disable cursor blinking by default
-(blink-cursor-mode)
+(blink-cursor-mode 0)
 
 ;; expose gp/ init files
 (add-to-list 'load-path (concat user-emacs-directory "gp"))
@@ -85,7 +100,12 @@
 
 ;; load themes, set mode line right away
 (require 'init_themes)
+;; set mode line
 (gp-set-mode-line)
+;; disable mode line by default
+;; we set up the mode line content and faces first so if we enable it
+;; later it'll have the correct settings
+;; (hidden-mode-line-mode)
 
 ;; expose gp/plugins files
 (add-to-list 'load-path (concat user-emacs-directory "gp/plugins"))
