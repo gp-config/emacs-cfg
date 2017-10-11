@@ -110,6 +110,10 @@
             "tis" 'indent-use-spaces
             "tit" 'indent-use-tabs
             "tii" 'indent-infer-spaces-or-tabs
+            ;; e - EXECUTE
+            "et" '(lambda () (interactive) (term "/usr/bin/zsh"))
+            "ec" 'execute-extended-command
+            "ee" 'eval-expression
             ;; s - SESSION
             "ss" 'gp-session-save
             "so" 'gp-session-load
@@ -207,6 +211,10 @@
         (which-key-add-key-based-replacements ",tn" "Line Numbers (Toggle)")
         (which-key-add-key-based-replacements ",th" "Highlight Current Line (Toggle)")
         (which-key-add-key-based-replacements ",tw" "Word Wrap (Toggle)")
+        (which-key-add-key-based-replacements ",e" "Execute...")
+        (which-key-add-key-based-replacements ",et" "Terminal (zsh)")
+        (which-key-add-key-based-replacements ",ec" "Command")
+        (which-key-add-key-based-replacements ",ee" "Evaluate Expression")
         (which-key-add-key-based-replacements ",h" "Help...")
         (which-key-add-key-based-replacements ",hd" "Describe..."))
 
