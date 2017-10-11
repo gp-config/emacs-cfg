@@ -41,12 +41,20 @@
         (setq gp-mode-line-enabled t))
 
 
+(defun gp-set-font () (interactive)
+  ;; (set-face-attribute 'default nil :font "Source Code Pro for Powerline-11" :weight 'Semibold)
+  ;; (set-face-attribute 'default nil :font "Hack-10" :weight 'Regular))
+  (set-face-attribute 'default nil :font "Monaco for Powerline-10" :weight 'Regular))
+
 ;; called at emacs-startup-hook
 (defun gp-init-themes ()
   ;; disable bits of the interface
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
   (menu-bar-mode -1)
+
+  ;; load preferred theme
+  (load-theme 'nimbostratus-purp t)
 
   ;; macOS
   (when (eq system-type 'darwin)
@@ -64,13 +72,16 @@
         (setq powerline-image-apple-rgb t))
 
   ;; set font face
-  (set-face-attribute 'default nil :font "Source Code Pro for Powerline" :weight 'Semibold)
+  (gp-set-font)
 
   ;; remove 1px border around mode line
   (custom-set-faces '(
     mode-line ((t (:box nil :overline nil :underline nil :weight bold)))))
 
-  ;; load theme
-  (load-theme 'nimbostratus-purp t))
+  ;; change color of window split
+  (set-face-foreground 'vertical-border "#363636")
+
+  ;; change line number color
+  (set-face-foreground 'linum "#575757"))
 
 (provide 'init_themes)
