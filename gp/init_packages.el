@@ -94,8 +94,8 @@
             ;; f - FILES
             "ff" 'find-file
             "fo" 'find-file
-            "fc" '(lambda () (interactive) (gp-session-load "config"))
-            "fed" '(lambda () (interactive) (gp-session-load "config"))
+            "fc" 'gp-session-load-config
+            "fed" 'gp-session-load-config
             ;; w - WINDOW
             "wd" 'evil-window-delete
             "wc" 'evil-window-delete
@@ -107,11 +107,11 @@
             "tw" 'toggle-truncate-lines
             "tm" 'hidden-mode-line-mode
             "ts" 'whitespace-mode
-            "tis" 'indent-use-spaces
-            "tit" 'indent-use-tabs
-            "tii" 'indent-infer-spaces-or-tabs
+            "tis" 'gp-indent-use-spaces
+            "tit" 'gp-indent-use-tabs
+            "tii" 'gp-indent-infer-spaces-or-tabs
             ;; e - EXECUTE
-            "et" '(lambda () (interactive) (term "/usr/bin/zsh"))
+            "et" 'gp-launch-terminal
             "ec" 'execute-extended-command
             "ee" 'eval-expression
             ;; s - SESSION

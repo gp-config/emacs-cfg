@@ -41,9 +41,9 @@
         (setq gp-mode-line-enabled t))
 
 
+;; default font
+;; may be overridden by machine-specific functions in init_helpers
 (defun gp-set-font () (interactive)
-  ;; (set-face-attribute 'default nil :font "Source Code Pro for Powerline-11" :weight 'Semibold)
-  ;; (set-face-attribute 'default nil :font "Hack-10" :weight 'Regular))
   (set-face-attribute 'default nil :font "Monaco for Powerline-10" :weight 'Regular))
 
 ;; called at emacs-startup-hook
@@ -56,22 +56,10 @@
   ;; load preferred theme
   (load-theme 'nimbostratus-purp t)
 
-  ;; macOS
-  (when (eq system-type 'darwin)
-    ;; keep menu bar enabled on mac as it's not annoying
-    (menu-bar-mode -1)
-      ;; fix colors in powerline separators
-      ;; (macOS SRGB issue with certain versions of emacs)
-      ;; two fixes here:
-      ;;
-      ;; disable srgb color space
-      ; (setq ns-use-srgb-colorspace nil)
-      ;; or
-      ;; use built-in powerline patch (recommended):
-      ; https://github.com/milkypostman/powerline/issues/54#issuecomment-310867163
-        (setq powerline-image-apple-rgb t))
-
   ;; set font face
+  ;; either calls the function defined in this file, or
+  ;; a function defined by a machine-specific configuration function
+  ;; called by init_helpers/gp-determine-machine
   (gp-set-font)
 
   ;; remove 1px border around mode line

@@ -1,7 +1,7 @@
 ;; EMACS INIT
 
 ;; open backtrace buffer when something goes wrong
-;; (set 'debug-on-error t)
+(set 'debug-on-error t)
 
 ;; dont load outdated byte code
 (setq load-prefer-newer t)
@@ -46,7 +46,7 @@
 (setq-default evil-shift-width 4)
 
 ;; use spaces instead of tabs by default
-;; use helpers/indent-infer-spaces-or-tabs or helpers/indent-use-tabs and indent-use-spaces to
+;; use helpers/gp-indent-infer-spaces-or-tabs or helpers/gp indent-use-tabs and gp-indent-use-spaces to
 ;; switch modes if needed
 (setq-default indent-tabs-mode nil)
 
@@ -96,12 +96,12 @@
 (add-hook 'emacs-lisp-mode-hook (lambda ()
                                   (setq tab-width 2)
                                   (setq evil-shift-width 2)
-                                  (indent-use-spaces)))
+                                  (gp-indent-use-spaces)))
 
 ;; infer whether to use spaces or tabs in java
-(add-hook 'java-mode-hook 'indent-infer-spaces-or-tabs)
+(add-hook 'java-mode-hook 'gp-indent-infer-spaces-or-tabs)
 
-;; load themes, set mode line right away
+;; load themes, set mode line
 (require 'init_themes)
 ;; set mode line
 (gp-set-mode-line)
@@ -109,6 +109,11 @@
 ;; we set up the mode line content and faces first so if we enable it
 ;; later it'll have the correct settings
 ;; (hidden-mode-line-mode)
+
+;; load machine specific configuration
+;; this should overwrite certain functions and variables, so
+;; make sure to load it at an appropriate time
+(gp-determine-machine)
 
 ;; expose gp/plugins files
 (add-to-list 'load-path (concat user-emacs-directory "gp/plugins"))
@@ -119,8 +124,7 @@
 ;; set up packages
 (require 'init_packages)
 
-;; set up themes and ui options once we're done starting up
-;; (add-hook 'emacs-startup-hook 'gp_init_themes)
-(add-hook 'emacs-startup-hook (gp-init-themes))
+;; set up themes and ui options
+(gp-init-themes)
 
 ;; end
