@@ -51,10 +51,10 @@ each character type present in the current file"
    ((string-equal system-name "Geordies-MacBook-Pro.local") (gp-setup-machine-macbook))
 
    ;; work laptop
-   ((string-equal system-name "gp-xubuntu") (work-laptop))
+   ((string-equal system-name "gp-toshiba") (gp-setup-machine-toshiba))
 
-   ;; unrecognized
-   (t (unrecognized-machine))
+   ;; default case - unrecognized
+   (t (gp-setup-machine-unrecognized))
    ))
 
 
@@ -94,7 +94,7 @@ each character type present in the current file"
          (term "/bin/zsh")))
 
 ;; ///////////// machine config: work laptop
-(defun gp-setup-machine-work-laptop ()
+(defun gp-setup-machine-toshiba ()
   (defun gp-launch-terminal () (interactive)
          (term "/usr/bin/zsh")))
 
