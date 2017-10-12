@@ -45,7 +45,6 @@ each character type present in the current file"
 ;; if we don't recognize the name, call unrecognized to set up defaults for
 ;; otherwise machine-dependant settings
 (defun gp-determine-machine ()
-  (message "Checking machine name")
   (cond
    ;; macbook pro
    ((string-equal system-name "Geordies-MacBook-Pro.local") (gp-setup-machine-macbook))
@@ -70,7 +69,6 @@ each character type present in the current file"
 ;; includes macOS specific settings
 (defun gp-setup-machine-macbook ()
 (when (eq system-type 'darwin)
-  (message "Loading MacBook configuration...")
   ;; keep menu bar enabled on mac as it's not annoying
   (menu-bar-mode -1)
     ;; fix colors in powerline separators
@@ -86,7 +84,6 @@ each character type present in the current file"
 
   ;; override font function in themes
   (defun gp-set-font () (interactive)
-    (message "SETTING MACBOOK FONT")
     (set-face-attribute 'default nil :font "Monaco-16" :weight 'Regular))
 
   ;; create function to launch terminal (default in unrecognized-machine)
