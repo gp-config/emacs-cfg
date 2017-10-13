@@ -23,22 +23,26 @@
 (defun gp-set-mode-line () (interactive)
     (column-number-mode)
     (setq
-        evil-normal-state-tag " N"
+        evil-normal-state-tag "  "
         evil-insert-state-tag " I"
         evil-visual-state-tag " V")
 
     (setq mode-line-position '((line-number-mode ("%l" (column-number-mode ":%c")))))
     (setq evil-mode-line-format '(before . mode-line-front-space))
 
-        (setq-default mode-line-format '("%e"
-            mode-line-front-space
-            evil-mode-line-tag
-            "/ "
-            mode-line-position
-            " / "
-            mode-line-buffer-identification
-            mode-line-end-spaces))
-        (setq gp-mode-line-enabled t))
+
+
+    (setq-default mode-line-format '("%e"
+        mode-line-front-space
+        evil-mode-line-tag
+        " "
+        mode-line-modified
+        "  "
+        mode-line-position
+        "  "
+        mode-line-buffer-identification
+        mode-line-end-spaces))
+    (setq gp-mode-line-enabled t))
 
 
 ;; default font
