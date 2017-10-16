@@ -56,7 +56,7 @@
 (show-paren-mode)
 
 ;; highlight current line
-(hl-line-mode)
+;; (hl-line-mode)
 
 ;; stop dired creating new buffers when entering directories
 (require 'dired)
