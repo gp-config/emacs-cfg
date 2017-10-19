@@ -101,6 +101,10 @@ each character type present in the current file"
 
 ;; ///////////// machine config: work laptop
 (defun gp-setup-machine-toshiba ()
+  ;; override font function in themes
+  (defun gp-set-font () (interactive)
+    (set-face-attribute 'default nil :font "Droid Sans Mono Dotted for Powerline-11" :weight 'Regular))
+
   (defun gp-launch-terminal () (interactive)
          (term "/usr/bin/zsh")))
 

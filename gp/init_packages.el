@@ -237,4 +237,10 @@
 (add-hook 'lisp-mode-hook 'enable-rainbow-delims)
 (add-hook 'emacs-lisp-mode-hook 'enable-rainbow-delims)
 
+(use-package company
+  :ensure t
+  :defer t
+  :init (add-hook 'after-init-hook 'global-company-mode)
+  :config (setq company-idle-delay 0.3))
+
 (provide 'init_packages)
