@@ -38,6 +38,9 @@
 (setq custom-file custom-file-path)
 (load custom-file)
 
+;; frame titles should show filename by default (even if only one frame exists)
+(setq frame-title-format "%b")
+
 ;; require trailing newline on file load AND save
 (setq require-final-newline 'visit-save)
 
