@@ -52,10 +52,19 @@ each character type present in the current file"
    ;; work laptop
    ((string-equal system-name "gp-toshiba") (gp-setup-machine-toshiba))
 
+   ;; desktop pc
+   ((string-equal system-name "gp-desktop") (gp-setup-machine-desktop))
+
    ;; default case - unrecognized
    (t (gp-setup-machine-unrecognized))
    ))
 
+;; ///////////// machine config: desktop
+(defun gp-setup-machine-desktop ()
+    ;; override font function in themes
+    (defun gp-set-font () (interactive)
+      (set-face-attribute 'default nil :font "Fira Mono for Powerline-10" :weight 'Medium))
+  )
 
 ;; ///////////// machine config: unrecognized
 ;; when we don't find a machine name we recognize,

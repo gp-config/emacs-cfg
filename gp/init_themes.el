@@ -48,7 +48,7 @@
 ;; default font
 ;; may be overridden by machine-specific functions in init_helpers
 (defun gp-set-font () (interactive)
-  (set-face-attribute 'default nil :font "Monaco for Powerline-10" :weight 'Regular))
+  (set-face-attribute 'default nil :font "Monospace-10" :weight 'Regular))
 
 ;; called at emacs-startup-hook
 (defun gp-init-themes ()
