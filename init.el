@@ -12,16 +12,28 @@
 
 ;; this line must exist; do not remove
 (package-initialize)
-;; configure auto file backups
-;; set a variable for convenience
-(defvar dir-file-backups (concat user-emacs-directory "file_backups"))
 
-;; create directory if it doesnt exist
+;; configure auto file backups
+;; set convenience variables
+(defvar dir-file-backups (concat user-emacs-directory "file_backups/"))
+(defvar dir-file-autosaves (concat dir-file-backups "autosaves/"))
+
+;; create file backup directories if they dont exist
 (unless (file-exists-p dir-file-backups) (make-directory dir-file-backups))
-;; set configuration
-(setq auto-save-list-file-name (concat dir-file-backups "/auto-save-list"))
+(unless (file-exists-p dir-file-autosaves) (make-directory dir-file-autosaves))
+
+;; file to store all the active auto save file names
+(setq auto-save-list-file-name (concat dir-file-autosaves "auto-save-list"))
+
+;; directory to save autosaves - these are temp files for edits that have not yet
+;; been committed to the source file ( #filename.ext# )
+(setq auto-save-file-name-transforms `((".*" ,(concat dir-file-autosaves "\\1") t)))
+
+;; directory for file backups ( filename.ext~ )
+(setq backup-directory-alist `(("." . ,dir-file-backups)))
+
+;; misc backup configuration
 (setq
- backup-directory-alist `(("." . ,dir-file-backups))
  backup-by-copying t
  delete-old-versions t
  kept-new-versions 3
