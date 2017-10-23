@@ -72,7 +72,7 @@
 	`(fringe ((,class (:background ,bg2 :foreground ,fg4))))
 	`(cursor ((,class (:background ,cursorCol))))
         `(show-paren-match-face ((,class (:background ,warning))))
-        `(isearch ((,class (:background ,warning :foreground ,bg1))))
+        `(isearch ((,class (:background ,warning :foreground ,fg1))))
         `(mode-line ((,class (:box nil :foreground ,fg4 :background ,bg2))))
         `(mode-line-inactive ((,class (:box nil :foreground ,key3 :background ,bg1 :weight normal))))
         `(mode-line-buffer-id ((,class (:foreground ,func :background nil))))

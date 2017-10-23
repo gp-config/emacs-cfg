@@ -70,9 +70,6 @@
 ; and highlight them
 (show-paren-mode)
 
-;; highlight current line
-;; (hl-line-mode)
-
 ;; stop dired creating new buffers when entering directories
 (require 'dired)
 (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
@@ -92,7 +89,7 @@
 (setq linum-format " %d ")
 
 ;; enable line highlight
-(global-hl-line-mode)
+;; (global-hl-line-mode)
 
 ;; disable fringes by default (use set-fringe-style command to change it within a session)
 (set-fringe-style 0)

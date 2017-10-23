@@ -104,6 +104,9 @@ each character type present in the current file"
   ;; override font function in themes
   (defun gp-set-font () (interactive)
     (set-face-attribute 'default nil :font "Droid Sans Mono Dotted for Powerline-11" :weight 'Regular))
+    ;; bitmap fonts
+    ;; (set-face-attribute 'default nil :font "TamzenForPowerline-12" :weight 'Regular))
+    ;; (set-face-attribute 'default nil :font "Peep-12" :weight 'Regular))
 
   (defun gp-launch-terminal () (interactive)
          (term "/usr/bin/zsh")))
