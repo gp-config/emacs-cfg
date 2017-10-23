@@ -31,6 +31,7 @@
 
  (deftheme nimbostratus-purp)
  (let ((class '((class color) (min-colors 89)))
+       (cursorCol "#7b7ac2")
        (fg1 "#cccccc")
        (fg2 "#bababa")
        (fg3 "#a8a8a8")
@@ -49,7 +50,7 @@
        (str     "#efefef")
        (type    "#cccccc")
        (var     "#7d87ab")
-       (warning "#5d83a3"))
+       (warning "#4f41be"))
    (custom-theme-set-faces
    'nimbostratus-purp
         `(default ((,class (:background ,bg1 :foreground ,fg1))))
@@ -69,7 +70,7 @@
         `(highlight ((,class (:foreground ,fg3 :background ,bg2))))
 	`(hl-line ((,class (:background  ,bg2))))
 	`(fringe ((,class (:background ,bg2 :foreground ,fg4))))
-	`(cursor ((,class (:background ,bg3))))
+	`(cursor ((,class (:background ,cursorCol))))
         `(show-paren-match-face ((,class (:background ,warning))))
         `(isearch ((,class (:background ,warning :foreground ,bg1))))
         `(mode-line ((,class (:box nil :foreground ,fg4 :background ,bg2))))
