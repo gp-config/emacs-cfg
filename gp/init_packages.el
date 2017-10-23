@@ -70,6 +70,14 @@
          :states '(normal motion emacs)
           ;; "C-p" 'switch-to-buffer)
           "C-p" 'counsel-projectile)
+        ;; ============= GENERAL KEYS - NEOTREE =============
+        (general-define-key
+         :states '(normal emacs)
+         :keymaps 'neotree-mode-map
+         "TAB" 'neotree-enter
+         "SPC" 'neotree-quick-look
+         "q" 'neotree-hide
+         "RET" 'neotree-enter)
         ;; ============= GENERAL KEYS - VIM =============
         ;; COMMA LEADER
         (general-define-key
@@ -110,6 +118,7 @@
             "tis" 'gp-indent-use-spaces
             "tit" 'gp-indent-use-tabs
             "tii" 'gp-indent-infer-spaces-or-tabs
+            "tt" 'neotree-toggle
             ;; e - EXECUTE
             "et" 'gp-launch-terminal
             "ec" 'execute-extended-command
@@ -209,6 +218,7 @@
         (which-key-add-key-based-replacements ",w" "Window...")
         (which-key-add-key-based-replacements ",t" "UI/Visual Toggles...")
         (which-key-add-key-based-replacements ",tn" "Line Numbers (Toggle)")
+        (which-key-add-key-based-replacements ",tt" "(Neo)Tree View Toggle")
         (which-key-add-key-based-replacements ",th" "Highlight Current Line (Toggle)")
         (which-key-add-key-based-replacements ",tw" "Word Wrap (Toggle)")
         (which-key-add-key-based-replacements ",e" "Execute...")
@@ -242,5 +252,9 @@
   :defer t
   :init (add-hook 'after-init-hook 'global-company-mode)
   :config (setq company-idle-delay 0.3))
+
+(use-package neotree
+  :ensure t
+  :defer t)
 
 (provide 'init_packages)
