@@ -257,4 +257,8 @@
   :ensure t
   :defer t)
 
+(use-package rust-mode
+  :ensure t
+  :defer t)
+
 (provide 'init_packages)
