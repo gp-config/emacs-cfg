@@ -50,6 +50,18 @@
 (defun gp-set-font () (interactive)
   (set-face-attribute 'default nil :font "Monospace-10" :weight 'Regular))
 
+(defun gp-set-faces () (interactive)
+  ;; remove 1px border around mode line
+  (custom-set-faces '(
+    mode-line ((t (:box nil :overline nil :underline nil :weight bold)))))
+
+  ;; change color of window split
+  (set-face-foreground 'vertical-border "#363636")
+
+  ;; change line number color
+  (set-face-foreground 'linum "#575757"))
+
+
 ;; called at emacs-startup-hook
 (defun gp-init-themes ()
   ;; disable bits of the interface
@@ -60,20 +72,13 @@
   ;; load preferred theme
   (load-theme 'nimbostratus-purp t)
 
+  ;; set colors of borders etc
+  (gp-set-faces)
+
   ;; set font face
   ;; either calls the function defined in this file, or
   ;; a function defined by a machine-specific configuration function
   ;; called by init_helpers/gp-determine-machine
-  (gp-set-font)
-
-  ;; remove 1px border around mode line
-  (custom-set-faces '(
-    mode-line ((t (:box nil :overline nil :underline nil :weight bold)))))
-
-  ;; change color of window split
-  (set-face-foreground 'vertical-border "#363636")
-
-  ;; change line number color
-  (set-face-foreground 'linum "#575757"))
+  (gp-set-font))
 
 (provide 'init_themes)

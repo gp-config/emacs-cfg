@@ -1,7 +1,7 @@
 ;; EMACS INIT
 
 ;; open backtrace buffer when something goes wrong
-(set 'debug-on-error t)
+;; (set 'debug-on-error t)
 
 ;; dont load outdated byte code
 (setq load-prefer-newer t)

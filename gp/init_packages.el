@@ -261,4 +261,9 @@
   :ensure t
   :defer t)
 
+(use-package rjsx-mode
+  :ensure t
+  :defer t
+  :config (setq js2-strict-missing-semi-warning nil))
+
 (provide 'init_packages)
