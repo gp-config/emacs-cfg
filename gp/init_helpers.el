@@ -19,6 +19,9 @@ Ignores directories 'elpa', 'themes', '.', '..'"
        ((and (eq isdir nil) (string= (substring path -3) ".el"))
         (find-file fullpath))))))
 
+(defun gp-reload-emacs-config () (interactive)
+       (load-file (concat user-emacs-directory "init.el")))
+
 (defun gp-session-load-config () (interactive)
        (gp-session-load "config"))
 

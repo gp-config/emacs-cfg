@@ -103,6 +103,7 @@
             "ff" 'find-file
             "fo" 'find-file
             "fc" 'gp-session-load-config
+            "fr" 'gp-reload-emacs-config
             "fed" 'gp-session-load-config
             ;; w - WINDOW
             "wd" 'evil-window-delete
@@ -188,9 +189,13 @@
   :ensure t
   :defer t
   :init
+        (use-package flx :ensure t :defer t)
         (ivy-mode 1)
         (setq ivy-use-virtual-buffers t)
-        (setq enable-recursive-minibuffers t))
+        (setq enable-recursive-minibuffers t)
+        ;; https://oremacs.com/2016/01/06/ivy-flx/
+        (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+        (setq ivy-initial-inputs-alist nil))
 
 (use-package counsel
   :ensure t
