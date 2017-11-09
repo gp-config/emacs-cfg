@@ -84,7 +84,7 @@
 ;; (setq scroll-step 1) ;; keyboard scroll one line at a time
 
 ;; enable line numbers
-(global-linum-mode)
+;; (global-linum-mode)
 ;; add a bit of spacing around line numbers
 (setq linum-format " %d ")
 
@@ -92,7 +92,7 @@
 ;; (global-hl-line-mode)
 
 ;; disable fringes by default (use set-fringe-style command to change it within a session)
-(set-fringe-style 0)
+(set-fringe-style '(1 . 1))
 
 ;; disable cursor blinking by default
 (blink-cursor-mode 0)

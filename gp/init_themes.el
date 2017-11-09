@@ -70,7 +70,8 @@
   (menu-bar-mode -1)
 
   ;; load preferred theme
-  (load-theme 'nimbostratus-purp t)
+  ;; (load-theme 'nimbostratus-purp t)
+  (load-theme 'nimbostratus-lime t)
 
   ;; set colors of borders etc
   (gp-set-faces)
