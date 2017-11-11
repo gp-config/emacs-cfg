@@ -59,7 +59,8 @@
   (set-face-foreground 'vertical-border "#363636")
 
   ;; change line number color
-  (set-face-foreground 'linum "#575757"))
+  ; (set-face-foreground 'linum "#575757"))
+  )
 
 
 ;; called at emacs-startup-hook

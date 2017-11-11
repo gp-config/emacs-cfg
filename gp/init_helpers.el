@@ -96,7 +96,8 @@ each character type present in the current file"
 
   ;; override font function in themes
   (defun gp-set-font () (interactive)
-    (set-face-attribute 'default nil :font "Monaco-16" :weight 'Regular))
+    ; (set-face-attribute 'default nil :font "Monaco-16" :weight 'Regular))
+    (set-face-attribute 'default nil :font "Source Code Pro for Powerline-16" :weight 'Regular))
 
   ;; create function to launch terminal (default in unrecognized-machine)
   (defun gp-launch-terminal () (interactive)
