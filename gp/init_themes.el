@@ -73,6 +73,7 @@
   ;; load preferred theme
   ;; (load-theme 'nimbostratus-purp t)
   (load-theme 'nimbostratus-lime t)
+  (load-theme 'brown t)
 
   ;; set colors of borders etc
   (gp-set-faces)
