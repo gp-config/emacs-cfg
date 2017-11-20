@@ -10,7 +10,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ivy powerline evil rainbow-delimiters highlight-indent-guides which-key use-package hl-todo general evil-escape evil-commentary airline-themes)))
+    (rjsx-mode ivy powerline evil rainbow-delimiters highlight-indent-guides which-key use-package hl-todo general evil-escape evil-commentary airline-themes)))
  '(tool-bar-mode nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

@@ -1,8 +1,9 @@
-;; th a dark background.
 
-;; Copyright (C) 2014 , geordiep
+;;; brown-theme.el --- Emacs theme with a dark background.
 
-;; Author: geordiep
+;; Copyright (C) 2014 , gp
+
+;; Author: gp
 ;; 
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "24"))
@@ -16,7 +17,7 @@
 
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR LIMEOSE. See the
 ;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
@@ -27,6 +28,13 @@
 ;;; Commentary:
 
 ;;; Code:
+
+;; col1 is for function names, cursor color, etc
+
+(setq theme_col1 "#B3A99E")
+;; col2 is for variable names
+
+(setq theme_col2 "#B3A89D")
 
  (deftheme brown)
  (let ((class '((class color) (min-colors 89)))
@@ -44,10 +52,11 @@
        (keyword "#b3a89d")
        (const   "#b3a89d")
        (comment "#403b3a")
-       (func    "#9e928e")
+       (func    theme_col1)
+       (cursorCol    theme_col1)
        (str     "#b3a89d")
        (type    "#b3a89d")
-       (var     "#b3a89d")
+       (var     theme_col2)
        (warning "#a87745"))
    (custom-theme-set-faces
    'brown
@@ -58,34 +67,34 @@
 	`(font-lock-reference-face ((,class (:foreground ,const))))
 	`(font-lock-constant-face ((,class (:foreground ,const))))
         `(font-lock-doc-face ((,class (:foreground ,comment))))
-        `(font-lock-function-name-face ((,class (:foreground ,func :bold t))))
-        `(font-lock-keyword-face ((,class (:bold ,class :foreground ,keyword))))
+        `(font-lock-function-name-face ((,class (:foreground ,func))))
+        `(font-lock-keyword-face ((,class (class :foreground ,keyword))))
         `(font-lock-string-face ((,class (:foreground ,str))))
         `(font-lock-type-face ((,class (:foreground ,type ))))
         `(font-lock-variable-name-face ((,class (:foreground ,var))))
         `(font-lock-warning-face ((,class (:foreground ,warning :background ,bg2))))
         `(region ((,class (:background ,fg1 :foreground ,bg1))))
-        `(highlight ((,class (:foreground ,fg3 :background ,bg3))))
+        `(highlight ((,class (:foreground ,fg3 :background ,bg2))))
 	`(hl-line ((,class (:background  ,bg2))))
 	`(fringe ((,class (:background ,bg2 :foreground ,fg4))))
-	`(cursor ((,class (:background ,bg3))))
+	`(cursor ((,class (:background ,cursorCol))))
         `(show-paren-match-face ((,class (:background ,warning))))
-        `(isearch ((,class (:bold t :foreground ,warning :background ,bg3))))
-        `(mode-line ((,class (:box (:line-width 1 :color nil) :bold t :foreground ,fg4 :background ,bg2))))
-        `(mode-line-inactive ((,class (:box (:line-width 1 :color nil :style pressed-button) :foreground ,key3 :background ,bg1 :weight normal))))
-        `(mode-line-buffer-id ((,class (:bold t :foreground ,func :background nil))))
-	`(mode-line-highlight ((,class (:foreground ,keyword :box nil :weight bold))))
+        `(isearch ((,class (:background ,warning :foreground ,fg1))))
+        `(mode-line ((,class (:box nil :foreground ,fg4 :background ,bg2))))
+        `(mode-line-inactive ((,class (:box nil :foreground ,key3 :background ,bg1 :weight normal))))
+        `(mode-line-buffer-id ((,class (:foreground ,func :background nil))))
+	`(mode-line-highlight ((,class (:foreground ,keyword :box nil :weight normal))))
         `(mode-line-emphasis ((,class (:foreground ,fg1))))
 	`(vertical-border ((,class (:foreground ,fg3))))
-        `(minibuffer-prompt ((,class (:bold t :foreground ,keyword))))
+        `(minibuffer-prompt ((,class (:foreground ,keyword))))
         `(default-italic ((,class (:italic t))))
 	`(link ((,class (:foreground ,const :underline t))))
 	`(org-code ((,class (:foreground ,fg2))))
 	`(org-hide ((,class (:foreground ,fg4))))
-        `(org-level-1 ((,class (:bold t :foreground ,fg2 :height 1.1))))
-        `(org-level-2 ((,class (:bold nil :foreground ,fg3))))
-        `(org-level-3 ((,class (:bold t :foreground ,fg4))))
-        `(org-level-4 ((,class (:bold nil :foreground ,bg4))))
+        `(org-level-1 ((,class (:foreground ,fg2 :height 1.1))))
+        `(org-level-2 ((,class (:foreground ,fg3))))
+        `(org-level-3 ((,class (:foreground ,fg4))))
+        `(org-level-4 ((,class (:foreground ,bg4))))
         `(org-date ((,class (:underline t :foreground ,var) )))
         `(org-footnote  ((,class (:underline t :foreground ,fg4))))
         `(org-link ((,class (:underline t :foreground ,type ))))
@@ -93,16 +102,16 @@
         `(org-block ((,class (:foreground ,fg3))))
         `(org-quote ((,class (:inherit org-block :slant italic))))
         `(org-verse ((,class (:inherit org-block :slant italic))))
-        `(org-todo ((,class (:box (:line-width 1 :color ,fg3) :foreground ,keyword :bold t))))
-        `(org-done ((,class (:box (:line-width 1 :color ,bg3) :bold t :foreground ,bg4))))
+        `(org-todo ((,class (:box (:line-width 1 :color ,fg3) :foreground ,keyword))))
+        `(org-done ((,class (:box (:line-width 1 :color ,bg3) :foreground ,bg4))))
         `(org-warning ((,class (:underline t :foreground ,warning))))
-        `(org-agenda-structure ((,class (:weight bold :foreground ,fg3 :box (:color ,fg4) :background ,bg3))))
+        `(org-agenda-structure ((,class (:weight normal :foreground ,fg3 :box (:color ,fg4) :background ,bg3))))
         `(org-agenda-date ((,class (:foreground ,var :height 1.1 ))))
         `(org-agenda-date-weekend ((,class (:weight normal :foreground ,fg4))))
-        `(org-agenda-date-today ((,class (:weight bold :foreground ,keyword :height 1.4))))
+        `(org-agenda-date-today ((,class (:weight normal :foreground ,keyword :height 1.4))))
         `(org-agenda-done ((,class (:foreground ,bg4))))
 	`(org-scheduled ((,class (:foreground ,type))))
-        `(org-scheduled-today ((,class (:foreground ,func :weight bold :height 1.2))))
+        `(org-scheduled-today ((,class (:foreground ,func :weight normal :height 1.2))))
 	`(org-ellipsis ((,class (:foreground ,builtin))))
 	`(org-verbatim ((,class (:foreground ,fg4))))
         `(org-document-info-keyword ((,class (:foreground ,func))))
@@ -113,11 +122,11 @@
 	`(font-latex-match-variable-keywords ((,class (:foreground ,var))))
 	`(ido-only-match ((,class (:foreground ,warning))))
 	`(org-sexp-date ((,class (:foreground ,fg4))))
-	`(ido-first-match ((,class (:foreground ,keyword :bold t))))
+	`(ido-first-match ((,class (:foreground ,keyword))))
 	`(gnus-header-content ((,class (:foreground ,keyword))))
 	`(gnus-header-from ((,class (:foreground ,var))))
 	`(gnus-header-name ((,class (:foreground ,type))))
-	`(gnus-header-subject ((,class (:foreground ,func :bold t))))
+	`(gnus-header-subject ((,class (:foreground ,func))))
 	`(mu4e-view-url-number-face ((,class (:foreground ,type))))
 	`(mu4e-cited-1-face ((,class (:foreground ,fg2))))
 	`(mu4e-cited-7-face ((,class (:foreground ,fg3))))
@@ -156,16 +165,16 @@
         `(rainbow-delimiters-depth-7-face ((,class :foreground ,type)))
         `(rainbow-delimiters-depth-8-face ((,class :foreground ,var)))
         `(magit-item-highlight ((,class :background ,bg3)))
-        `(magit-section-heading        ((,class (:foreground ,keyword :weight bold))))
+        `(magit-section-heading        ((,class (:foreground ,keyword :weight normal))))
         `(magit-hunk-heading           ((,class (:background ,bg3))))
         `(magit-section-highlight      ((,class (:background ,bg2))))
         `(magit-hunk-heading-highlight ((,class (:background ,bg3))))
         `(magit-diff-context-highlight ((,class (:background ,bg3 :foreground ,fg3))))
         `(magit-diffstat-added   ((,class (:foreground ,type))))
         `(magit-diffstat-removed ((,class (:foreground ,var))))
-        `(magit-process-ok ((,class (:foreground ,func :weight bold))))
-        `(magit-process-ng ((,class (:foreground ,warning :weight bold))))
-        `(magit-branch ((,class (:foreground ,const :weight bold))))
+        `(magit-process-ok ((,class (:foreground ,func :weight normal))))
+        `(magit-process-ng ((,class (:foreground ,warning :weight normal))))
+        `(magit-branch ((,class (:foreground ,const :weight normal))))
         `(magit-log-author ((,class (:foreground ,fg3))))
         `(magit-hash ((,class (:foreground ,fg2))))
         `(magit-diff-file-header ((,class (:foreground ,fg2 :background ,bg3))))
@@ -181,7 +190,7 @@
         `(term-color-white ((,class (:foreground ,fg2 :background ,fg2))))
         `(rainbow-delimiters-unmatched-face ((,class :foreground ,warning)))
         `(helm-header ((,class (:foreground ,fg2 :background ,bg1 :underline nil :box nil))))
-        `(helm-source-header ((,class (:foreground ,keyword :background ,bg1 :underline nil :weight bold))))
+        `(helm-source-header ((,class (:foreground ,keyword :background ,bg1 :underline nil :weight normal))))
         `(helm-selection ((,class (:background ,bg2 :underline nil))))
         `(helm-selection-line ((,class (:background ,bg2))))
         `(helm-visible-mark ((,class (:foreground ,bg1 :background ,bg3))))
@@ -193,11 +202,11 @@
         `(helm-buffer-process ((,class (:foreground ,builtin :background ,bg1))))
         `(helm-buffer-saved-out ((,class (:foreground ,fg1 :background ,bg1))))
         `(helm-buffer-size ((,class (:foreground ,fg1 :background ,bg1))))
-        `(helm-ff-directory ((,class (:foreground ,func :background ,bg1 :weight bold))))
+        `(helm-ff-directory ((,class (:foreground ,func :background ,bg1 :weight normal))))
         `(helm-ff-file ((,class (:foreground ,fg1 :background ,bg1 :weight normal))))
         `(helm-ff-executable ((,class (:foreground ,key2 :background ,bg1 :weight normal))))
-        `(helm-ff-invalid-symlink ((,class (:foreground ,key3 :background ,bg1 :weight bold))))
-        `(helm-ff-symlink ((,class (:foreground ,keyword :background ,bg1 :weight bold))))
+        `(helm-ff-invalid-symlink ((,class (:foreground ,key3 :background ,bg1 :weight normal))))
+        `(helm-ff-symlink ((,class (:foreground ,keyword :background ,bg1 :weight normal))))
         `(helm-ff-prefix ((,class (:foreground ,bg1 :background ,keyword :weight normal))))
         `(helm-grep-cmd-line ((,class (:foreground ,fg1 :background ,bg1))))
         `(helm-grep-file ((,class (:foreground ,fg1 :background ,bg1))))
@@ -214,7 +223,7 @@
         `(company-preview-search ((,class (:foreground ,type :background ,bg1))))
         `(company-scrollbar-bg ((,class (:background ,bg3))))
         `(company-scrollbar-fg ((,class (:foreground ,keyword))))
-        `(company-tooltip ((,class (:foreground ,fg2 :background ,bg1 :bold t))))
+        `(company-tooltip ((,class (:foreground ,fg2 :background ,bg1))))
         `(company-tooltop-annotation ((,class (:foreground ,const))))
         `(company-tooltip-common ((,class ( :foreground ,fg3))))
         `(company-tooltip-common-selection ((,class (:foreground ,str))))
@@ -242,9 +251,9 @@
         `(jde-java-font-lock-number-face ((t (:foreground ,var))))))
 
 ;;;###autoload
-(when load-file-name
-  (add-to-list 'custom-theme-load-path
-               (file-name-as-directory (file-name-directory load-file-name))))
+;; (when load-file-name
+;;   (add-to-list 'custom-theme-load-path
+;;                (file-name-as-directory (file-name-directory load-file-name))))
 
 (provide-theme 'brown)
 
