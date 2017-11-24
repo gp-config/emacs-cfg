@@ -151,6 +151,14 @@
   :defer t
   :init (evil-commentary-mode))
 
+(use-package evil-org
+  :ensure t
+  :after org
+  :config
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda () (evil-org-set-key-theme))))
+
 (defun gp-powerline-enable () (interactive)
     (use-package powerline
     :ensure t

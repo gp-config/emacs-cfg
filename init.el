@@ -59,6 +59,7 @@
 ;; tabs (and evil mode shifts) 4 spaces wide
 (setq-default tab-width 4)
 (setq-default evil-shift-width 4)
+(setq js-indent-level 4)
 
 ;; use spaces instead of tabs by default
 ;; use helpers/gp-indent-infer-spaces-or-tabs or helpers/gp indent-use-tabs and gp-indent-use-spaces to
