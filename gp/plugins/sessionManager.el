@@ -23,4 +23,4 @@
                               (directory-files dir-session-save))
   nil nil nil session-name-history))
 
-(provide 'session)
+(provide 'sessionManager)

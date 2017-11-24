@@ -132,7 +132,7 @@
 (add-to-list 'load-path (concat user-emacs-directory "gp/plugins"))
 
 ;; load session plugin
-(require 'session)
+(require 'sessionManager)
 
 ;; set up packages
 (require 'init_packages)
