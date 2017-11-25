@@ -92,6 +92,9 @@
 ;; enable line highlight
 ;; (global-hl-line-mode)
 
+;; line spacing
+(setq-default line-spacing 0.15)
+
 ;; disable fringes by default (use set-fringe-style command to change it within a session)
 (set-fringe-style '(1 . 1))
 

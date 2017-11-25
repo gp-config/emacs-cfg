@@ -157,7 +157,7 @@
   :config
   (add-hook 'org-mode-hook 'evil-org-mode)
   (add-hook 'evil-org-mode-hook
-            (lambda () (evil-org-set-key-theme))))
+            (lambda () (evil-org-set-key-theme '(textobjects insert navigation shift todo)))))
 
 (defun gp-powerline-enable () (interactive)
     (use-package powerline
