@@ -66,7 +66,8 @@ each character type present in the current file"
 (defun gp-setup-machine-desktop ()
     ;; override font function in themes
     (defun gp-set-font () (interactive)
-      (set-face-attribute 'default nil :font "Fira Mono for Powerline-11" :weight 'Medium))
+      (set-face-attribute 'default nil :font "Droid Sans Mono for Powerline-11" :weight 'Medium))
+      ;; (set-face-attribute 'default nil :font "Fira Mono for Powerline-11" :weight 'Medium))
   )
 
 ;; ///////////// machine config: unrecognized
