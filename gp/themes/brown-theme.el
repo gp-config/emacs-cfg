@@ -25,20 +25,24 @@
 
 ;; This file is not part of Emacs.
 
-;;; Commentary:
-
-;;; Code:
-
 ;; col1 is for function names, cursor color, etc
-
-(setq theme_col1 "#B3A99E")
+;; (setq theme_col1 "#B3A99E")
+(setq theme_col1 "#938A80")
 ;; col2 is for variable names
-
-(setq theme_col2 "#B3A89D")
+;; (setq theme_col2 "#B3A89D")
+(setq theme_col2 "#968D84")
+;; cursor color
+(setq theme_cursorcol theme_col1)
+;; comments
+(setq theme_commentcol "#403b3a")
+(setq theme_commentcol "#454343")
+;; warning/search current match highlight bg/matching brace bg
+(setq theme_searchmatchcol_bg "#827371")
+(setq theme_searchmatchcol_fg "#000000")
 
  (deftheme brown)
  (let ((class '((class color) (min-colors 89)))
-       (fg1 "#7A6C6A")
+       (fg1 "#827371")
        (fg2 "#706361")
        (fg3 "#665a59")
        (fg4 "#5c5250")
@@ -48,16 +52,17 @@
        (bg4 "#4a4949")
        (key2 "#bbb1a7")
        (key3 "#9d948a")
-       (builtin "#b3a89d")
-       (keyword "#b3a89d")
-       (const   "#b3a89d")
+       ;; (builtin "#b3a89d")
+       (builtin theme_col2)
+       (keyword theme_col2)
+       (const   theme_col2)
        (comment "#403b3a")
        (func    theme_col1)
-       (cursorCol    theme_col1)
-       (str     "#b3a89d")
-       (type    "#b3a89d")
+       (cursorCol    theme_cursorcol)
+       (str     theme_col2)
+       (type    theme_col2)
        (var     theme_col2)
-       (warning "#a87745"))
+       (warning theme_searchmatchcol_bg))
    (custom-theme-set-faces
    'brown
         `(default ((,class (:background ,bg1 :foreground ,fg1))))
@@ -78,8 +83,8 @@
 	`(hl-line ((,class (:background  ,bg2))))
 	`(fringe ((,class (:background ,bg2 :foreground ,fg4))))
 	`(cursor ((,class (:background ,cursorCol))))
-        `(show-paren-match-face ((,class (:background ,warning))))
-        `(isearch ((,class (:background ,warning :foreground ,fg1))))
+        `(show-paren-match-face ((,class (:background ,warning :foreground ,theme_searchmatchcol_fg))))
+        `(isearch ((,class (:background ,warning :foreground ,theme_searchmatchcol_fg))))
         `(mode-line ((,class (:box nil :foreground ,fg4 :background ,bg2))))
         `(mode-line-inactive ((,class (:box nil :foreground ,key3 :background ,bg1 :weight normal))))
         `(mode-line-buffer-id ((,class (:foreground ,func :background nil))))
