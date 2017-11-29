@@ -155,9 +155,12 @@
   :ensure t
   :after org
   :config
+  (use-package org-bullets :ensure t)
   (add-hook 'org-mode-hook 'evil-org-mode)
   (add-hook 'evil-org-mode-hook
-            (lambda () (evil-org-set-key-theme '(textobjects insert navigation shift todo)))))
+            (lambda ()
+              (evil-org-set-key-theme '(textobjects insert navigation shift todo))
+              (org-bullets-mode 1))))
 
 (defun gp-powerline-enable () (interactive)
     (use-package powerline

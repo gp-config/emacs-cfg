@@ -23,11 +23,11 @@
 (defun gp-set-mode-line () (interactive)
     (column-number-mode)
     (setq
-        evil-normal-state-tag "  "
-        evil-insert-state-tag " I"
-        evil-visual-state-tag " V")
+        evil-normal-state-tag " NOR"
+        evil-insert-state-tag " INS"
+        evil-visual-state-tag " VIS")
 
-    (setq mode-line-position '((line-number-mode ("%l" (column-number-mode ":%c")))))
+    (setq mode-line-position '((line-number-mode ("L%l"))))
     (setq evil-mode-line-format '(before . mode-line-front-space))
 
 

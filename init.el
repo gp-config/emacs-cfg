@@ -40,6 +40,12 @@
  kept-old-versions 1
  version-control nil)
 
+;; disable lock files
+;; these are ".#filename.extension" files that are created in file's current dir when you
+;; begin editing them, in order to prevent other instances of emacs from creating conflicts.
+;; disable them here as to not trip directory watching auto-compilation systems
+(setq create-lockfiles nil)
+
 ;; configure custom file
 ;; this is where emacs will place all of its auto-saved config
 ;; create file if it doesnt exist
@@ -76,6 +82,13 @@
 (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
 (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))
 (put 'dired-find-alternate-file 'disabled nil)
+
+;; org mode todo states
+(setq org-todo-keywords
+      '((sequence "TODO(t)" "DOING(o!)" "|" "DONE(d!)")))
+
+;; org mode todo log done
+(setq org-log-done 'time)
 
 ;; scroll settings
 (setq mouse-wheel-scroll-amount '(3)) ;; three lines at a time
