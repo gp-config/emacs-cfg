@@ -53,7 +53,7 @@
 (defun gp-set-faces () (interactive)
   ;; remove 1px border around mode line
   (custom-set-faces '(
-    mode-line ((t (:box nil :overline nil :underline nil :weight bold)))))
+                      mode-line ((t (:box nil :overline nil :underline nil :weight normal :height 100)))))
 
   ;; change color of window split
   (set-face-foreground 'vertical-border "#363636")
@@ -72,8 +72,8 @@
 
   ;; load preferred theme
   ;; (load-theme 'nimbostratus-purp t)
-  ;; (load-theme 'nimbostratus-lime t)
-  (load-theme 'brown t)
+  (load-theme 'nimbostratus t)
+  ;; (load-theme 'brown t)
 
   ;; set colors of borders etc
   (gp-set-faces)

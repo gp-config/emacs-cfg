@@ -69,7 +69,9 @@
         (general-define-key
          :states '(normal motion emacs)
           ;; "C-p" 'switch-to-buffer)
-          "C-p" 'counsel-projectile)
+         "C-p" 'counsel-projectile
+         ;; confirm ivy minibuffer with currently typed value rather than suggestion 
+         "C-M-j" 'ivy-immediate-done)
         ;; ============= GENERAL KEYS - NEOTREE =============
         (general-define-key
          :states '(normal emacs)
