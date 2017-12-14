@@ -108,7 +108,9 @@ each character type present in the current file"
 (defun gp-setup-machine-toshiba ()
   ;; override font function in themes
   (defun gp-set-font () (interactive)
-    (set-face-attribute 'default nil :font "Droid Sans Mono Dotted for Powerline-11" :weight 'Regular))
+         ; (set-face-attribute 'default nil :font "Droid Sans Mono Dotted for Powerline-11" :weight 'Regular)
+         (set-face-attribute 'default nil :font "Droid Sans Mono Dotted for Powerline-11" :weight 'Regular)
+         (add-to-list 'default-frame-alist '(font . "Droid Sans Mono Dotted for Powerline-11")))
     ;; bitmap fonts
     ;; (set-face-attribute 'default nil :font "TamzenForPowerline-12" :weight 'Regular))
     ;; (set-face-attribute 'default nil :font "Peep-12" :weight 'Regular))

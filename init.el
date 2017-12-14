@@ -1,7 +1,7 @@
 ;; EMACS INIT
 
 ;; open backtrace buffer when something goes wrong
-;; (set 'debug-on-error t)
+(set 'debug-on-error t)
 
 ;; dont load outdated byte code
 (setq load-prefer-newer t)
@@ -109,7 +109,8 @@
 (setq-default line-spacing 0.15)
 
 ;; disable fringes by default (use set-fringe-style command to change it within a session)
-(set-fringe-style '(1 . 1))
+;; (set-fringe-style '(1 . 1))
+(setq default-frame-alist (nconc default-frame-alist '((left-fringe . 1) (right-fringe . 1))))
 
 ;; disable cursor blinking by default
 (blink-cursor-mode 0)

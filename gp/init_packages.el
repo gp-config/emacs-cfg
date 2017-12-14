@@ -102,8 +102,8 @@
             "sv" 'evil-window-vsplit
             "sh" 'evil-window-split
             ;; f - FILES
-            "ff" 'find-file
-            "fo" 'find-file
+            "ff" 'counsel-find-file
+            "fo" 'counsel-find-file
             "fc" 'gp-session-load-config
             "fr" 'gp-reload-emacs-config
             "fed" 'gp-session-load-config
@@ -283,5 +283,9 @@
   :ensure t
   :defer t
   :config (setq js2-strict-missing-semi-warning nil))
+
+(use-package fish-mode
+  :ensure t
+  :defer t)
 
 (provide 'init_packages)
