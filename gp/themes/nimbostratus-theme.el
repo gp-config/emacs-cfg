@@ -49,7 +49,7 @@
        (fg2 "#706361")
        (fg3 "#665a59")
        (fg4 theme_modeline_text_col)
-       (bg1 "#222426")
+       (bg1 "#1c1c1f")
        (bg2 "#1e1e1e")
        (bg3 "#3a3939")
        (bg4 "#4a4949")
