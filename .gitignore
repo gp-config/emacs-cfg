@@ -3,6 +3,12 @@
 recentf
 projectile-bookmarks.eld
 
+# compiled elisp files
+*.elc
+
+# output file of config.org tangle
+config.el
+
 # dirs
 url/
 elpa/

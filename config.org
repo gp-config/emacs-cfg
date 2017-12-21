@@ -1,0 +1,585 @@
+#+TITLE: Geordie Powers - Emacs Configuration
+# Adapted from Holger Schurig's config. https://bitbucket.org/holgerschurig/emacsconf
+#+BABEL: :cache yes
+#+PROPERTY: header-args :tangle yes
+  
+* INIT
+** Emacs backup files, autosaves, lock files
+   - *Backup Files* are created as a copy of the file just before Emacs writes new changes to it. They look like **filename.ext~**
+
+   - *Autosave Files* are intermittently created by Emacs while you are working on a file in order to provide a restore point for files if a crash or otherwise descructive event occurs. They look like **#filename.ext#**
+
+   - *Lock Files* are created when Emacs visits a file, in order to prevent other instances of Emacs from visiting the same file and creating conflicts in the file contents. They look like **.#filename.ext**
+   
+   
+    #+BEGIN_SRC emacs-lisp
+
+    (let* ((dir-file-backups (concat user-emacs-directory "file_backups/"))
+        (dir-file-autosaves (concat dir-file-backups "autosaves/")))
+
+    ;; create file backup dirs if they dont exist
+    (unless (file-exists-p dir-file-backups) (make-directory dir-file-backups))
+    (unless (file-exists-p dir-file-autosaves) (make-directory dir-file-autosaves))
+
+    ;; file backup configuration
+    (setq
+    backup-by-copying t
+    delete-old-versions t
+    kept-new-versions 2
+    kept-old-versions 1
+    version-control nil)
+
+    (setq
+    ;; file to store all active autosaved file names
+    auto-save-list-file-name (concat dir-file-autosaves "auto-save-list")
+    ;; directory to store autosaves ( #filename.ext# )
+    auto-save-file-name-transforms `((".*" ,(concat dir-file-autosaves "\\1") t))
+    ;; directory for backup files ( filename.ext~ )
+    backup-directory-alist `(("." . ,dir-file-backups))
+    ;; disable lock files ( .#filename.extension )
+    create-lockfiles nil))
+
+    #+END_SRC
+    
+** Emacs custom file
+   Configure custom file. This is where emacs will place all of its auto-generated config; anything that's customized in the editor or otherwise needs to be remembered by Emacs between sessions.
+
+    #+BEGIN_SRC emacs-lisp
+    ;; create file if it doesnt exist
+    (defvar custom-file-path (concat user-emacs-directory "auto_custom.el"))
+    (unless (file-exists-p custom-file-path) (write-region "" nil custom-file-path))
+    
+    ;; use own custom file path and load it in
+    (setq custom-file custom-file-path)
+    (load custom-file)
+    #+END_SRC
+* Debug
+** Open backtrace buffer when something goes wrong
+    #+BEGIN_SRC  emacs-lisp
+    (set 'debug-on-error t)
+    #+END_SRC
+* Helpers
+** General Helper functions
+    #+BEGIN_SRC emacs-lisp
+    (defun gp-session-load-config () (interactive)
+        (gp-session-load "config"))
+        
+    (defun gp-indent-use-tabs () (interactive)
+        "Use tabs for indentation"
+        (setq indent-tabs-mode t)
+        (setq-default indent-tabs-mode t))
+
+    (defun gp-indent-use-spaces () (interactive)
+        "Use spaces for indentation"
+        (setq indent-tabs-mode nil)
+        (setq-default indent-tabs-mode nil))
+    #+END_SRC
+** Machine-specific Configuration
+*** Determine Machine
+    Figure out which machine we're on and call the appropriate setup function.
+    If we don't recognize the machine name, call 'unrecognized' to set up defaults for otherwise machine-dependant settings.
+    #+BEGIN_SRC emacs-lisp
+        (defun gp-determine-machine ()
+            (cond
+            ;; macbook pro
+            ((string-equal system-name "Geordies-MacBook-Pro.local") (gp-setup-machine-macbook))
+
+            ;; work laptop
+            ((string-equal system-name "gp-toshiba") (gp-setup-machine-toshiba))
+
+            ;; desktop pc
+            ((string-equal system-name "gp-desktop") (gp-setup-machine-desktop))
+
+            ;; default case - unrecognized
+            (t (gp-setup-machine-unrecognized))))
+    #+END_SRC
+*** Machine Setup: Desktop PC
+    #+BEGIN_SRC emacs-lisp
+        (defun gp-setup-machine-desktop ()
+            ;; override font function in themes
+            (defun gp-set-font () (interactive)
+            (set-face-attribute 'default nil :font "Droid Sans Mono for Powerline-11" :weight 'Medium)))
+            ;; (set-face-attribute 'default nil :font "Fira Mono for Powerline-11" :weight 'Medium)))
+    #+END_SRC
+*** Machine Setup: MacBook Pro
+    #+BEGIN_SRC emacs-lisp
+        (defun gp-setup-machine-macbook ()
+        (when (eq system-type 'darwin)
+        ;; keep menu bar enabled on mac as it's not annoying
+        (menu-bar-mode -1)
+            ;; fix colors in powerline separators
+            ;; (macOS SRGB issue with certain versions of emacs)
+            ;; two fixes here:
+            ;;
+            ;; disable srgb color space
+            ; (setq ns-use-srgb-colorspace nil)
+            ;; or
+            ;; use built-in powerline patch (recommended):
+            ; https://github.com/milkypostman/powerline/issues/54#issuecomment-310867163
+            (setq powerline-image-apple-rgb t))
+
+        ;; override font function in themes
+        (defun gp-set-font () (interactive)
+            (set-face-attribute 'default nil :font "Source Code Pro for Powerline-16" :weight 'Regular)))
+    #+END_SRC
+*** Machine Setup: Work Laptop
+    #+BEGIN_SRC emacs-lisp
+    (defun gp-setup-machine-toshiba ()
+    ;; override font function in themes
+    (defun gp-set-font () (interactive)
+            ; (set-face-attribute 'default nil :font "Droid Sans Mono Dotted for Powerline-11" :weight 'Regular)
+            (set-face-attribute 'default nil :font "Droid Sans Mono Dotted for Powerline-11" :weight 'Regular)
+            (add-to-list 'default-frame-alist '(font . "Droid Sans Mono Dotted for Powerline-11"))))
+    #+END_SRC
+*** Unrecognized Machine (default setup)
+    #+BEGIN_SRC emacs-lisp
+    (defun gp-set-font () (interactive)
+        (set-face-attribute 'default nil :font "Monospace-10" :weight 'Regular))
+    #+END_SRC
+    
+* Visuals
+** Basic Visuals (from old init.el)
+#+BEGIN_SRC emacs-lisp
+
+;; dont load outdated byte code
+(setq load-prefer-newer t)
+
+;; machine specific setup
+(gp-determine-machine)
+
+;; initial messages
+(setq inhibit-startup-message t)
+(setq initial-scratch-message "")
+
+;; require trailing newline on file load AND save
+(setq require-final-newline 'visit-save)
+
+;; frame titles should show filename by default (even if only one frame exists)
+(setq frame-title-format "%b")
+
+;; tabs (and evil mode shifts) 4 spaces wide
+(setq-default tab-width 4)
+(setq-default evil-shift-width 4)
+(setq js-indent-level 4)
+
+;; expose gp/plugins
+(add-to-list 'load-path (concat user-emacs-directory "gp"))
+(add-to-list 'load-path (concat user-emacs-directory "gp/plugins"))
+
+;; use 2 spaces in el files
+(add-hook 'emacs-lisp-mode-hook (lambda ()
+                                  (setq tab-width 2)
+                                  (setq evil-shift-width 2)))
+
+;; use spaces instead of tabs by default
+;; switch modes if needed
+(setq-default indent-tabs-mode nil)
+
+;; match braces, parens, quotes etc
+(electric-pair-mode)
+; and highlight them
+(show-paren-mode)
+
+;; stop dired creating new buffers when entering directories
+(require 'dired)
+(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+(define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))
+(put 'dired-find-alternate-file 'disabled nil)
+
+;; org mode todo states
+(setq org-todo-keywords
+    '((sequence "TODO(t)" "DOING(d!)" "|" "DONE(x)")
+    (sequence "CANC(c)")))
+
+;; org mode todo log done
+(setq org-log-done 'time)
+
+;; scroll settings
+(setq mouse-wheel-scroll-amount '(3)) ;; three lines at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+;; (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+;; (setq scroll-conservatively 101) ;; move minimum when cursor exits view, instead of recentering
+;; (setq scroll-step 1) ;; keyboard scroll one line at a time
+
+;; enable line numbers
+;; (global-linum-mode)
+
+;; add a bit of spacing around line numbers
+(setq linum-format " %d ")
+
+;; enable line highlight
+;; (global-hl-line-mode)
+
+;; line spacing
+(setq-default line-spacing 0.15)
+
+;; disable fringes by default (use set-fringe-style command to change it within a session)
+;; (set-fringe-style '(1 . 1))
+(setq default-frame-alist (nconc default-frame-alist '((left-fringe . 1) (right-fringe . 1))))
+
+;; disable cursor blinking by default
+(blink-cursor-mode 0)
+
+;; change color of window split
+(set-face-foreground 'vertical-border "#363636")
+
+;; disable bits of the interface
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode -1)
+
+
+;; require session managing plugin
+(require 'sessionManager)
+
+#+END_SRC
+* Packages
+Set up packages
+#+BEGIN_SRC emacs-lisp
+
+(package-initialize)
+
+;; define package repos
+(defconst gnu '("gnu" . "https://elpa.gnu.org/packages/"))
+(defconst melpa '("melpa" . "https://melpa.org/packages/"))
+(defconst melpa-stable '("melpa-stable" . "https://stable.melpa.org/packages/"))
+
+;; add package repos to archives list
+(setq package-archives nil)
+(add-to-list 'package-archives melpa-stable t)
+(add-to-list 'package-archives melpa t)
+(add-to-list 'package-archives gnu t)
+
+(unless (and (file-exists-p "~/.emacs.d/elpa/archives/gnu")
+  (file-exists-p "~/.emacs.d/elpa/archives/melpa")
+  (file-exists-p "~/.emacs.d/elpa/archives/melpa-stable"))
+	(package-refresh-contents))
+    
+;; evaluate the package list and install missing packages
+(defun packages-install (&rest packages)
+  ; (message "running packages-install")
+  (mapc (lambda (package)
+	  (let ((name (car package))
+		(repo (cdr package)))
+	    (when (not (package-installed-p name))
+	      (let ((package-archives (list repo)))
+		(package-initialize)
+		(package-install name)))))
+	packages)
+  (package-initialize)
+  (delete-other-windows))
+  
+;; install any packages if they're missing
+(defun init--install-packages ()
+  ; (message "installing packages")
+  (packages-install (cons 'use-package melpa)))
+  
+(condition-case nil
+    (init--install-packages)
+  (error
+   (package-refresh-contents)
+   (init--install-packages)))
+   
+   
+
+;; ====================== install/load packages ====================== ;;
+
+;; use-package :init - run before package is loaded
+;; use-package :config - run after package is loaded
+   
+(use-package general
+  :ensure t
+  :config
+        ;; KEY BINDS
+        ;; different states get different general-define-key blocks
+        ;; eg, we dont want the , leader key to be active in insert mode
+        ;; ============= GENERAL KEYS - MISC =============
+        (general-define-key
+          :states '(normal motion emacs insert)
+          "C-h" 'evil-window-left
+          "C-j" 'evil-window-down
+          "C-k" 'evil-window-up
+          "C-l" 'evil-window-right
+          "C-u" 'evil-scroll-up
+          ;; ctrl+shift+enter to insert line above
+          "C-S-<return>" '(lambda () (interactive)
+                        (previous-line)
+                        (end-of-line)
+                        (newline-and-indent))
+          "C-<return>" '(lambda () (interactive)
+                          (end-of-line)
+                          (newline-and-indent)))
+        ;; ============= GENERAL KEYS - MISC - NO INSERT MODE =============
+        (general-define-key
+         :states '(normal motion emacs)
+          ;; "C-p" 'switch-to-buffer)
+         "C-p" 'counsel-projectile
+         ;; confirm ivy minibuffer with currently typed value rather than suggestion 
+         "C-M-j" 'ivy-immediate-done)
+        ;; ============= GENERAL KEYS - NEOTREE =============
+        (general-define-key
+         :states '(normal emacs)
+         :keymaps 'neotree-mode-map
+         "TAB" 'neotree-enter
+         "SPC" 'neotree-quick-look
+         "q" 'neotree-hide
+         "RET" 'neotree-enter)
+        ;; ============= GENERAL KEYS - VIM =============
+        ;; COMMA LEADER
+        (general-define-key
+            :states '(normal motion emacs)
+            :prefix ","
+            ;; SHORTCUTS (misc keys, not inside a "menu")
+            "v" 'evil-window-vsplit
+            "c" 'kill-this-buffer
+            "q" 'next-buffer
+            "z" 'previous-buffer
+            "x" 'execute-extended-command
+            ;; MENUS - <leader><menu key> enters a "menu"
+            ;; b - BUFFERS
+            "bd" 'kill-buffer
+            "bb" 'switch-to-buffer
+            "bn" 'next-buffer
+            "bp" 'previous-buffer
+            "bl" 'list-buffers
+            ;; s - SPLITS
+            "sv" 'evil-window-vsplit
+            "sh" 'evil-window-split
+            ;; f - FILES
+            "ff" 'counsel-find-file
+            "fo" 'counsel-find-file
+            "fc" 'gp-session-load-config
+            "fr" 'gp-reload-emacs-config
+            "fed" 'gp-session-load-config
+            ;; w - WINDOW
+            "wd" 'evil-window-delete
+            "wc" 'evil-window-delete
+            "wv" 'evil-window-vnew
+            "wh" 'evil-window-new
+            ;; t - UI TOGGLES
+            "tn" 'global-linum-mode
+            "th" 'hl-line-mode
+            "tw" 'toggle-truncate-lines
+            "tm" 'hidden-mode-line-mode
+            "ts" 'whitespace-mode
+            "tis" 'gp-indent-use-spaces
+            "tit" 'gp-indent-use-tabs
+            "tt" 'neotree-toggle
+            ;; e - EXECUTE
+            "et" 'gp-launch-terminal
+            "ec" 'execute-extended-command
+            "ee" 'eval-expression
+            ;; s - SESSION
+            "ss" 'gp-session-save
+            "so" 'gp-session-load
+            ;; "sa" ;; TODO: toggle session auto-save
+            ;; h - HELP
+	    ;; h d - HELP > DESCRIBE
+            "hdv" 'describe-variable
+            "hdf" 'describe-function
+            "hdk" 'describe-key
+            ))
+
+(use-package evil-escape
+  :ensure t
+  :defer
+  :init (evil-escape-mode)
+  :config (setq-default evil-escape-key-sequence "kj"))
+
+(use-package evil
+  :ensure t
+  :init (evil-mode 1)
+  :config (define-key evil-normal-state-map "," nil))
+
+(use-package evil-commentary
+  :ensure t
+  :defer t
+  :init (evil-commentary-mode))
+
+(use-package evil-org
+  :ensure t
+  :after org
+  :config
+  (use-package org-bullets :ensure t)
+  (add-hook 'org-mode-hook 'evil-org-mode)
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme '(textobjects insert navigation shift todo))
+              (org-bullets-mode 1))))
+
+(defun gp-powerline-enable () (interactive)
+    (use-package powerline
+    :ensure t
+    :init
+            ;; (my-powerline-theme)
+            ; previews of separators: http://spacemacs.org/doc/DOCUMENTATION.html#mode-line
+            ;; (setq powerline-default-separator 'alternate)
+            ;; (setq powerline-default-separator 'arrow)
+            ;; (setq powerline-default-separator 'arrow-fade)
+            ;; (setq powerline-default-separator 'bar)
+            ;; (setq powerline-default-separator 'box)
+            ;; (setq powerline-default-separator 'brace)
+            ;; (setq powerline-default-separator 'butt)
+            ;; (setq powerline-default-separator 'chamfer)
+            ;; (setq powerline-default-separator 'contour)
+            ;; (setq powerline-default-separator 'curve)
+            ;; (setq powerline-default-separator 'rounded)
+            ;; (setq powerline-default-separator 'roundstub)
+            (setq powerline-default-separator 'slant)
+            ;; (setq powerline-default-separator 'wave)
+            ;; (setq powerline-default-separator 'zigzag)
+            ;; (setq powerline-default-separator 'nil)
+                ;; this package adds a lot to emacs boot time
+                ;; commenting it out for now
+                (use-package airline-themes
+                :ensure t
+                :config
+                        (powerline-default-theme)
+                        (load-theme 'airline-wombat t)
+                        (force-mode-line-update)
+                        (redraw-display))
+                            ;; (load-theme 'airline-papercolor t)))
+            ))
+
+(use-package ivy
+  :ensure t
+  :defer t
+  :init
+        (use-package flx :ensure t :defer t)
+        (ivy-mode 1)
+        (setq ivy-use-virtual-buffers t)
+        (setq enable-recursive-minibuffers t)
+        ;; https://oremacs.com/2016/01/06/ivy-flx/
+        (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
+        (setq ivy-initial-inputs-alist nil))
+
+(use-package counsel
+  :ensure t
+  :defer t)
+
+(use-package projectile
+  :ensure t
+  :defer t
+  :init
+  (use-package counsel-projectile
+    :ensure t)
+  :config
+    (projectile-global-mode)
+    (counsel-projectile-on))
+
+(use-package which-key
+  :ensure t
+  :defer t
+  :init
+        (which-key-mode)
+        (which-key-add-key-based-replacements ",b" "Buffers...")
+        (which-key-add-key-based-replacements ",s" "Splits...")
+        (which-key-add-key-based-replacements ",f" "Files...")
+        (which-key-add-key-based-replacements ",fc" "Edit Emacs configuration files")
+        (which-key-add-key-based-replacements ",w" "Window...")
+        (which-key-add-key-based-replacements ",t" "UI/Visual Toggles...")
+        (which-key-add-key-based-replacements ",tn" "Line Numbers (Toggle)")
+        (which-key-add-key-based-replacements ",tt" "(Neo)Tree View Toggle")
+        (which-key-add-key-based-replacements ",th" "Highlight Current Line (Toggle)")
+        (which-key-add-key-based-replacements ",tw" "Word Wrap (Toggle)")
+        (which-key-add-key-based-replacements ",e" "Execute...")
+        (which-key-add-key-based-replacements ",et" "Terminal (zsh)")
+        (which-key-add-key-based-replacements ",ec" "Command")
+        (which-key-add-key-based-replacements ",ee" "Evaluate Expression")
+        (which-key-add-key-based-replacements ",h" "Help...")
+        (which-key-add-key-based-replacements ",hd" "Describe..."))
+
+(use-package hl-todo
+  :ensure t
+  :defer t
+  :init (global-hl-todo-mode))
+
+(use-package highlight-indent-guides
+  :ensure t
+  :defer t
+  :init (setq highlight-indent-guides-method 'character))
+
+;; function to load rainbow delimiters
+(defun enable-rainbow-delims ()
+    (use-package rainbow-delimiters
+    :ensure t
+    :init (rainbow-delimiters-mode)))
+;; don't load the rainbow delims package until we open a lisp or elisp file
+(add-hook 'lisp-mode-hook 'enable-rainbow-delims)
+(add-hook 'emacs-lisp-mode-hook 'enable-rainbow-delims)
+
+(use-package company
+  :ensure t
+  :defer t
+  :init (add-hook 'after-init-hook 'global-company-mode)
+  :config (setq company-idle-delay 0.3))
+
+(use-package neotree
+  :ensure t
+  :defer t)
+
+(use-package rust-mode
+  :ensure t
+  :defer t)
+
+(use-package rjsx-mode
+  :ensure t
+  :defer t
+  :config (setq js2-strict-missing-semi-warning nil))
+
+(use-package fish-mode
+  :ensure t
+  :defer t)
+#+END_SRC
+* Themes
+Themes setup
+#+BEGIN_SRC emacs-lisp
+
+;; set up themes dir
+(add-to-list 'custom-theme-load-path (concat user-emacs-directory "gp/themes/"))
+
+;; set up mode line
+;; remove 1px border around mode line
+(custom-set-faces '(mode-line ((t (:box nil :overline nil :underline nil :weight normal :height 100)))))
+
+(column-number-mode)
+(setq
+    evil-normal-state-tag " n"
+    evil-insert-state-tag " i"
+    evil-visual-state-tag " v")
+
+(setq mode-line-position '((line-number-mode ("%l"))))
+(setq evil-mode-line-format '(before . mode-line-front-space))
+
+(setq-default mode-line-format '("%e"
+    mode-line-front-space
+    evil-mode-line-tag
+    " "
+    mode-line-modified
+    "  "
+    mode-line-position
+    "  "
+    mode-line-buffer-identification
+    mode-line-end-spaces))
+
+
+(setq gp-mode-line-enabled t)
+    
+;; change line number color
+; (set-face-foreground 'linum "#575757"))
+
+
+(load-theme 'nimbostratus t)
+
+;; set font face
+;; calls function defined in helpers based on machine
+(gp-set-font)
+#+END_SRC
+* TODOs
+** TODO instead of including all machine setup functions, only tangle the function that the current machine needs
+** TODO remove when os = darwin condition in macbook pro machine setup, as that stuff will only run on mac machine anyway
+** TODO init--install-packages function is unnecessary
+** TODO seem to only be able to update load-path from within init.el (remove all instances from config.org if necessary)
+** TODO font isnt getting loaded right - maybe issue with system-type?
+** TODO for every 'assignment to free variable' warning during compilation, switch setq statement to defvar
+** TODO move gp-byte-compile-on-save function to inside open elisp file hook?

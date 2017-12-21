@@ -1,160 +1,255 @@
-;; EMACS INIT
+;; ;; open backtrace buffer when something goes wrong
+;; (set 'debug-on-error t)
 
-;; open backtrace buffer when something goes wrong
-(set 'debug-on-error t)
+;; ;; dont load outdated byte code
+;; (setq load-prefer-newer t)
 
-;; dont load outdated byte code
-(setq load-prefer-newer t)
+;; ;; initial messages
+;; (setq inhibit-startup-message t)
+;; (setq initial-scratch-message "")
 
-;; initial messages
-(setq inhibit-startup-message t)
-(setq initial-scratch-message "")
+;; ;; this line must exist; do not remove
+;; (package-initialize)
 
-;; this line must exist; do not remove
-(package-initialize)
+;; ;; configure auto file backups
+;; ;; set convenience variables
+;; (defvar dir-file-backups (concat user-emacs-directory "file_backups/"))
+;; (defvar dir-file-autosaves (concat dir-file-backups "autosaves/"))
 
-;; configure auto file backups
-;; set convenience variables
-(defvar dir-file-backups (concat user-emacs-directory "file_backups/"))
-(defvar dir-file-autosaves (concat dir-file-backups "autosaves/"))
+;; ;; create file backup directories if they dont exist
+;; (unless (file-exists-p dir-file-backups) (make-directory dir-file-backups))
+;; (unless (file-exists-p dir-file-autosaves) (make-directory dir-file-autosaves))
 
-;; create file backup directories if they dont exist
-(unless (file-exists-p dir-file-backups) (make-directory dir-file-backups))
-(unless (file-exists-p dir-file-autosaves) (make-directory dir-file-autosaves))
+;; ;; file to store all the active auto save file names
+;; (setq auto-save-list-file-name (concat dir-file-autosaves "auto-save-list"))
 
-;; file to store all the active auto save file names
-(setq auto-save-list-file-name (concat dir-file-autosaves "auto-save-list"))
+;; ;; directory to save autosaves - these are temp files for edits that have not yet
+;; ;; been committed to the source file ( #filename.ext# )
+;; (setq auto-save-file-name-transforms `((".*" ,(concat dir-file-autosaves "\\1") t)))
 
-;; directory to save autosaves - these are temp files for edits that have not yet
-;; been committed to the source file ( #filename.ext# )
-(setq auto-save-file-name-transforms `((".*" ,(concat dir-file-autosaves "\\1") t)))
+;; ;; directory for file backups ( filename.ext~ )
+;; (setq backup-directory-alist `(("." . ,dir-file-backups)))
 
-;; directory for file backups ( filename.ext~ )
-(setq backup-directory-alist `(("." . ,dir-file-backups)))
+;; ;; misc backup configuration
+;; (setq
+;;  backup-by-copying t
+;;  delete-old-versions t
+;;  kept-new-versions 3
+;;  kept-old-versions 1
+;;  version-control nil)
 
-;; misc backup configuration
-(setq
- backup-by-copying t
- delete-old-versions t
- kept-new-versions 3
- kept-old-versions 1
- version-control nil)
+;; ;; disable lock files
+;; ;; these are ".#filename.extension" files that are created in file's current dir when you
+;; ;; begin editing them, in order to prevent other instances of emacs from creating conflicts.
+;; ;; disable them here as to not trip directory watching auto-compilation systems
+;; (setq create-lockfiles nil)
 
-;; disable lock files
-;; these are ".#filename.extension" files that are created in file's current dir when you
-;; begin editing them, in order to prevent other instances of emacs from creating conflicts.
-;; disable them here as to not trip directory watching auto-compilation systems
-(setq create-lockfiles nil)
+;; ;; configure custom file
+;; ;; this is where emacs will place all of its auto-saved config
+;; ;; create file if it doesnt exist
+;; (defvar custom-file-path (concat user-emacs-directory "auto_custom.el"))
+;; (unless (file-exists-p custom-file-path) (write-region "" nil custom-file-path))
 
-;; configure custom file
-;; this is where emacs will place all of its auto-saved config
-;; create file if it doesnt exist
-(defvar custom-file-path (concat user-emacs-directory "auto_custom.el"))
-(unless (file-exists-p custom-file-path) (write-region "" nil custom-file-path))
+;; ;; use own custom file path
+;; (setq custom-file custom-file-path)
+;; (load custom-file)
 
-;; use own custom file path
-(setq custom-file custom-file-path)
-(load custom-file)
+;; ;; frame titles should show filename by default (even if only one frame exists)
+;; (setq frame-title-format "%b")
 
-;; frame titles should show filename by default (even if only one frame exists)
-(setq frame-title-format "%b")
+;; ;; require trailing newline on file load AND save
+;; (setq require-final-newline 'visit-save)
 
-;; require trailing newline on file load AND save
-(setq require-final-newline 'visit-save)
+;; ;; tabs (and evil mode shifts) 4 spaces wide
+;; (setq-default tab-width 4)
+;; (setq-default evil-shift-width 4)
+;; (setq js-indent-level 4)
 
-;; tabs (and evil mode shifts) 4 spaces wide
-(setq-default tab-width 4)
-(setq-default evil-shift-width 4)
-(setq js-indent-level 4)
+;; ;; use spaces instead of tabs by default
+;; ;; use helpers/gp-indent-infer-spaces-or-tabs or helpers/gp indent-use-tabs and gp-indent-use-spaces to
+;; ;; switch modes if needed
+;; (setq-default indent-tabs-mode nil)
 
-;; use spaces instead of tabs by default
-;; use helpers/gp-indent-infer-spaces-or-tabs or helpers/gp indent-use-tabs and gp-indent-use-spaces to
-;; switch modes if needed
-(setq-default indent-tabs-mode nil)
+;; ;; match braces, parens, quotes etc
+;; (electric-pair-mode)
+;; ; and highlight them
+;; (show-paren-mode)
 
-;; match braces, parens, quotes etc
-(electric-pair-mode)
-; and highlight them
-(show-paren-mode)
+;; ;; stop dired creating new buffers when entering directories
+;; (require 'dired)
+;; (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+;; (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))
+;; (put 'dired-find-alternate-file 'disabled nil)
 
-;; stop dired creating new buffers when entering directories
-(require 'dired)
-(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
-(define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))
-(put 'dired-find-alternate-file 'disabled nil)
+;; ;; org mode todo states
+;; (setq org-todo-keywords
+;;       '((sequence "TODO(t)" "DOING(o!)" "|" "DONE(d!)")))
 
-;; org mode todo states
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "DOING(o!)" "|" "DONE(d!)")))
+;; ;; org mode todo log done
+;; (setq org-log-done 'time)
 
-;; org mode todo log done
-(setq org-log-done 'time)
+;; ;; scroll settings
+;; (setq mouse-wheel-scroll-amount '(3)) ;; three lines at a time
+;; (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+;; ;; (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+;; ;; (setq scroll-conservatively 101) ;; move minimum when cursor exits view, instead of recentering
+;; ;; (setq scroll-step 1) ;; keyboard scroll one line at a time
 
-;; scroll settings
-(setq mouse-wheel-scroll-amount '(3)) ;; three lines at a time
-(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-;; (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
-;; (setq scroll-conservatively 101) ;; move minimum when cursor exits view, instead of recentering
-;; (setq scroll-step 1) ;; keyboard scroll one line at a time
+;; ;; enable line numbers
+;; ;; (global-linum-mode)
+;; ;; add a bit of spacing around line numbers
+;; (setq linum-format " %d ")
 
-;; enable line numbers
-;; (global-linum-mode)
-;; add a bit of spacing around line numbers
-(setq linum-format " %d ")
+;; ;; enable line highlight
+;; ;; (global-hl-line-mode)
 
-;; enable line highlight
-;; (global-hl-line-mode)
+;; ;; line spacing
+;; (setq-default line-spacing 0.15)
 
-;; line spacing
-(setq-default line-spacing 0.15)
+;; ;; disable fringes by default (use set-fringe-style command to change it within a session)
+;; ;; (set-fringe-style '(1 . 1))
+;; (setq default-frame-alist (nconc default-frame-alist '((left-fringe . 1) (right-fringe . 1))))
 
-;; disable fringes by default (use set-fringe-style command to change it within a session)
-;; (set-fringe-style '(1 . 1))
-(setq default-frame-alist (nconc default-frame-alist '((left-fringe . 1) (right-fringe . 1))))
+;; ;; disable cursor blinking by default
+;; (blink-cursor-mode 0)
 
-;; disable cursor blinking by default
-(blink-cursor-mode 0)
+;; ;; expose gp/ init files
+;; (add-to-list 'load-path (concat user-emacs-directory "gp"))
 
-;; expose gp/ init files
-(add-to-list 'load-path (concat user-emacs-directory "gp"))
+;; ;; load helper functions
+;; ;; do this before loading other init files, as they might depend on helper functions
+;; (require 'init_helpers)
 
-;; load helper functions
-;; do this before loading other init files, as they might depend on helper functions
-(require 'init_helpers)
+;; ;; use 2 spaces in el files
+;; (add-hook 'emacs-lisp-mode-hook (lambda ()
+;;                                   (setq tab-width 2)
+;;                                   (setq evil-shift-width 2)
+;;                                   (gp-indent-use-spaces)))
 
-;; use 2 spaces in el files
-(add-hook 'emacs-lisp-mode-hook (lambda ()
-                                  (setq tab-width 2)
-                                  (setq evil-shift-width 2)
-                                  (gp-indent-use-spaces)))
+;; ;; infer whether to use spaces or tabs in java
+;; (add-hook 'java-mode-hook 'gp-indent-infer-spaces-or-tabs)
 
-;; infer whether to use spaces or tabs in java
-(add-hook 'java-mode-hook 'gp-indent-infer-spaces-or-tabs)
+;; ;; load themes, set mode line
+;; (require 'init_themes)
+;; ;; set mode line
+;; (gp-set-mode-line)
+;; ;; disable mode line by default
+;; ;; we set up the mode line content and faces first so if we enable it
+;; ;; later it'll have the correct settings
+;; ;; (hidden-mode-line-mode)
 
-;; load themes, set mode line
-(require 'init_themes)
-;; set mode line
-(gp-set-mode-line)
-;; disable mode line by default
-;; we set up the mode line content and faces first so if we enable it
-;; later it'll have the correct settings
-;; (hidden-mode-line-mode)
+;; ;; load machine specific configuration
+;; ;; this should overwrite certain functions and variables, so
+;; ;; make sure to load it at an appropriate time
+;; (gp-determine-machine)
 
-;; load machine specific configuration
-;; this should overwrite certain functions and variables, so
-;; make sure to load it at an appropriate time
-(gp-determine-machine)
+;; ;; expose gp/plugins files
+;; (add-to-list 'load-path (concat user-emacs-directory "gp/plugins"))
 
-;; expose gp/plugins files
+;; ;; load session plugin
+;; (require 'sessionManager)
+
+;; ;; set up packages
+;; (require 'init_packages)
+
+;; ;; set up themes and ui options
+;; (gp-init-themes)
+
+;; ;; end
+
+
+
+
+
+
+
+
+
+
+;; for some reason, updating the load path needs to be done here
 (add-to-list 'load-path (concat user-emacs-directory "gp/plugins"))
 
-;; load session plugin
-(require 'sessionManager)
 
-;; set up packages
-(require 'init_packages)
+(defun gp-byte-compile-on-save ()
+  "byte compile an .el file at save time, if
+  it's in the user emacs directory"
+  (when (and(string= (file-name-directory (buffer-file-name)) (expand-file-name user-emacs-directory))
+            (string= (file-name-extension (buffer-file-name)) "el"))
+    (byte-compile-file (buffer-file-name) nil)))
+(add-hook 'after-save-hook #'gp-byte-compile-on-save)
 
-;; set up themes and ui options
-(gp-init-themes)
+(defun gp-tangle-section-cancelled ()
+  "checks if previous section header was CANCELLED"
+  (save-excursion
+    (if (re-search-backward "^\\*+\\s-+\\(.*?\\)?\\s-*$" nil t)
+        (progn
+          ;; message "FOUND '%s'" (match-string 1))
+          (string-prefix-p "CANC" (match-string 1)))
+      nil)))
 
-;; end
+(defun gp-tangle-config-org (orgfile elfile)
+  "this function will write all source blocks from =config.org= into
+=config.el= that are ...
+- not marked as :tangle no
+- have a source code of =emacs-lisp=
+- do not have a todo marker CANC"
+  (let* (;; list where we cobble together body parts
+         (body-list ())
+         ;; disable special file headers when loading .org files
+         (file-name-handler-alist nil)
+         ;; monster regexp to extract pieces out of an org file
+         (org-babel-src-block-regexp (concat
+                                      ;; (1) indentation                 (2) lang
+                                      "^\\([ \t]*\\)#\\+begin_src[ \t]+\\([^ \f\t\n\r\v]+\\)[ \t]*"
+                                      ;; (3) switches
+                                      "\\([^\":\n]*\"[^\"\n*]*\"[^\":\n]*\\|[^\":\n]*\\)"
+                                      ;; (4) header arguments
+                                      "\\([^\n]*\\)\n"
+                                      ;; (5) body
+                                      "\\([^\000]*?\n\\)??[ \t]*#\\+end_src")))
+    (with-temp-buffer
+      (insert-file-contents orgfile)
+      (goto-char (point-min))
+      (while (re-search-forward org-babel-src-block-regexp nil t)
+        (let ((lang (match-string 2))
+              (args (match-string 4))
+              (body (match-string 5))
+              (canc (gp-tangle-section-cancelled)))
+          (when (and (string= lang "emacs-lisp")
+                     (not (string-match-p ":tangle\\s-+no" args))
+                     (not canc))
+            (add-to-list 'body-list body)))))
+
+    (with-temp-file elfile
+      (insert ";; *- lexical-binding: t; -*-\n")
+      (insert (format ";; Don't edit this file, edit %s instead ...\n\n" orgfile))
+      ;; (insert (apply 'concat (reverse body-list)))
+      (apply 'insert (reverse body-list)))))
+
+(defun gp-load-file (fname)
+  "This loads an elisp configuration file. If an .org file exists,
+it will be first untangled. If an byte-compiled file does NOT exist,
+it will be created. After this, the normal loading logic happens."
+  (let* (;; disable garbage collection while we do heavy string work
+         (gc-cons-threshold most-positive-fixnum)
+         ;; fname with various extensions
+         (sansfile (expand-file-name (file-name-sans-extension fname) user-emacs-directory))
+         (orgfile (concat sansfile ".org"))
+         (elfile  (concat sansfile ".el"))
+         (elcfile (concat sansfile ".elc")))
+    (when (file-exists-p orgfile)
+      ;; when el file does not exist or org file is newer than el file
+      (when (or (not (file-exists-p elfile))
+                (file-newer-than-file-p orgfile elfile))
+        ;; tangle the org file
+        (gp-tangle-config-org orgfile elfile)))
+
+    ;; when a compiled file doesnt exist or the el file is newer than compiled version
+    (when (or (not (file-exists-p elcfile))
+              (file-newer-than-file-p elfile elcfile))
+      ;; byte compile the el file
+      (byte-compile-file elfile))
+    ;; load the compiled version
+    (load elfile nil 'nomessage)))
+
+(gp-load-file "config")
