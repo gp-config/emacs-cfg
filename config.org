@@ -10,9 +10,9 @@
     #+END_SRC
 * Emacs File Handling
 ** Emacs backup files, autosaves, lock files
-   - *Backup Files* are created as a copy of the file just before Emacs writes new changes to it. They look like **filename.ext~**
-   - *Autosave Files* are intermittently created by Emacs while you are working on a file in order to provide a restore point for files if a crash or otherwise descructive event occurs. They look like **#filename.ext#**
-   - *Lock Files* are created when Emacs visits a file, in order to prevent other instances of Emacs from visiting the same file and creating conflicts in the file contents. They look like **.#filename.ext**
+   - *Backup Files* are created as a copy of the file just before Emacs writes new changes to it. They look like =filename.ext~=
+   - *Autosave Files* are intermittently created by Emacs while you are working on a file in order to provide a restore point for files if a crash or otherwise descructive event occurs. They look like =#filename.ext#=
+   - *Lock Files* are created when Emacs visits a file, in order to prevent other instances of Emacs from visiting the same file and creating conflicts in the file contents. They look like =.#filename.ext=
 
    #+BEGIN_SRC emacs-lisp
    (let* ((dir-file-backups (concat user-emacs-directory "file_backups/"))
@@ -42,14 +42,18 @@
    #+END_SRC
     
 ** Emacs custom file
-    Configure custom file. This is where emacs will place all of its auto-generated config; anything that's customized in the editor or otherwise needs to be remembered by Emacs between sessions.
+   Configure custom file. This is where emacs will place all of its auto-generated config; anything that's customized in the editor or otherwise needs to be remembered by Emacs between sessions.
+    
+    Create file if it doesn't already exist
     
     #+BEGIN_SRC emacs-lisp
-    ;; create file if it doesnt exist
-    (defvar custom-file-path (concat user-emacs-directory "auto_custom.el"))
+    (setq custom-file-path (concat user-emacs-directory "auto_custom.el"))
     (unless (file-exists-p custom-file-path) (write-region "" nil custom-file-path))
-
-    ;; use own custom file path and load it
+    #+END_SRC
+    
+    Set own custom file path, then load it
+    
+    #+BEGIN_SRC emacs-lisp
     (setq custom-file custom-file-path)
     (load custom-file)
     #+END_SRC
@@ -60,16 +64,14 @@
    #+END_SRC
 *** Enforce newline on file load and save
     #+BEGIN_SRC emacs-lisp
-    (setq require-final-newline 'visit-save)
+    (setq-default require-final-newline t)
     #+END_SRC
 * Machine-specific Configuration
 ** Machine Setup: Desktop PC
    #+BEGIN_SRC emacs-lisp
        (defun gp-setup-machine-desktop ()
-           ;; override font function in themes
            (defun gp-set-font () (interactive)
            (set-face-attribute 'default nil :font "Droid Sans Mono for Powerline-11" :weight 'Medium)))
-           ;; (set-face-attribute 'default nil :font "Fira Mono for Powerline-11" :weight 'Medium)))
    #+END_SRC
 ** Machine Setup: MacBook Pro
    #+BEGIN_SRC emacs-lisp
@@ -87,18 +89,15 @@
            ; https://github.com/milkypostman/powerline/issues/54#issuecomment-310867163
            (defvar powerline-image-apple-rgb t)
 
-           ;; override font function in themes
            (defun gp-set-font () (interactive)
                (set-face-attribute 'default nil :font "Source Code Pro for Powerline-16" :weight 'Regular)))
    #+END_SRC
 ** Machine Setup: Work laptop
    #+BEGIN_SRC emacs-lisp
    (defun gp-setup-machine-toshiba ()
-   ;; override font function in themes
-   (defun gp-set-font () (interactive)
-           ; (set-face-attribute 'default nil :font "Droid Sans Mono Dotted for Powerline-11" :weight 'Regular)
-           (set-face-attribute 'default nil :font "Droid Sans Mono Dotted for Powerline-11" :weight 'Regular)
-           (add-to-list 'default-frame-alist '(font . "Droid Sans Mono Dotted for Powerline-11"))))
+       (defun gp-set-font () (interactive)
+               (set-face-attribute 'default nil :font "Droid Sans Mono Dotted for Powerline-11" :weight 'Regular)
+               (add-to-list 'default-frame-alist '(font . "Droid Sans Mono Dotted for Powerline-11"))))
    #+END_SRC
 ** Machine Setup: Unrecognized (fallback option)
    #+BEGIN_SRC emacs-lisp
@@ -107,7 +106,7 @@
    #+END_SRC
 ** Determine current machine
    Figure out which machine we're on and call the appropriate setup function.
-   If we don't recognize the machine name, call 'unrecognized' to set up defaults for otherwise machine-dependant settings.
+   If we don't recognize the machine name, call =unrecognized= to set up defaults for otherwise machine-dependant settings.
     
    #+BEGIN_SRC emacs-lisp
        (defun gp-determine-machine ()
@@ -126,23 +125,28 @@
    #+END_SRC
     
    Call the function right away to perform machine setup
+   
    #+BEGIN_SRC emacs-lisp
    (gp-determine-machine)
    #+END_SRC
 ** Load GP plugins
-    Load my own plugins from local *./gp/plugins* directory (must be in load path)
+    Load my own plugins from local =./gp/plugins= directory (must be in load path - should be done by init.el)
     
     #+BEGIN_SRC emacs-lisp
     ;; session manager
     (require 'sessionManager)
     #+END_SRC
 * Util Functions
+    Switch to tabs mode
     #+BEGIN_SRC emacs-lisp
     (defun gp-indent-use-tabs () (interactive)
         "Use tabs for indentation"
         (setq indent-tabs-mode t)
         (setq-default indent-tabs-mode t))
+    #+END_SRC
 
+    Switch to spaces mode
+    #+BEGIN_SRC emacs-lisp
     (defun gp-indent-use-spaces () (interactive)
         "Use spaces for indentation"
         (setq indent-tabs-mode nil)
@@ -172,17 +176,11 @@
     #+BEGIN_SRC emacs-lisp
     (setq-default line-spacing 0.15)
     #+END_SRC
-*** Fringes and window split border
-    Set fringes to 1px. Use *set-fringe-style* command to change it within a session.
+*** Fringes
+    Set fringes to 1px. Use =set-fringe-style= command to change it within a session.
     
     #+BEGIN_SRC emacs-lisp
     (setq default-frame-alist (nconc default-frame-alist '((left-fringe . 1) (right-fringe . 1))))
-    #+END_SRC
-    
-    Change color of window split line
-    
-    #+BEGIN_SRC emacs-lisp
-    (set-face-foreground 'vertical-border "#363636")
     #+END_SRC
 *** Disable cursor blinking
     #+BEGIN_SRC emacs-lisp
@@ -200,28 +198,33 @@
     (setq frame-title-format "%b")
     #+END_SRC
 *** Set font
-    Set preferred font for current machine by calling function gp-set-font. gp-set-font is defined based on what machine Emacs is running on (see *Machine specific configuration* section)
+    Set preferred font for current machine by calling function =gp-set-font=, which is a function defined based on which machine our Emacs instance is running on (see *Machine specific configuration* section)
     
     #+BEGIN_SRC emacs-lisp
     (gp-set-font)
     #+END_SRC
 ** Indentation
-    Tabs (and evil mode shifts) should be 4 spaces wide, and 4 space characters should be used by default. Call functions *gp-indent-use-spaces* and *gp-indent-use-tabs* to switch style for current session.
+    Use spaces by default.
+    Call functions =gp-indent-use-spaces= and =gp-indent-use-tabs= to switch style for current session.
     
     #+BEGIN_SRC emacs-lisp
-    ;; use spaces by default
     (setq-default indent-tabs-mode nil)
+    #+END_SRC
     
-    ;; set default indent widths
+    Tabs (and evil mode shifts) should be 4 spaces wide
+    #+BEGIN_SRC emacs-lisp
     (setq-default tab-width 4)
     (setq-default evil-shift-width 4)
-    (defvar js-indent-level 4)
+    (setq-default js-indent-level 4)
     #+END_SRC
 ** Braces, parens, quotes, etc
-    Auto-close braces, parens, quotes, etc, and highlight matching scope delimiter to one under cursor
-    
+    Auto-close braces, parens, quotes, etc
     #+BEGIN_SRC emacs-lisp
     (electric-pair-mode)
+    #+END_SRC
+    
+    Highlight matching scope delimiter to the one under the cursor
+    #+BEGIN_SRC emacs-lisp
     (show-paren-mode)
     #+END_SRC
 ** Dired behavior
@@ -237,27 +240,30 @@
    Set up org mode TODO states. OFF state is used to disable sections of this config file.
 
     #+BEGIN_SRC emacs-lisp
-      ;; (defvar org-log-done 'time)
-    (defvar org-todo-keywords
+    (setq org-todo-keywords
         '((sequence "TODO(t)" "DOING(d!)" "|" "DONE(x)")
         (sequence "OFF(o)")))
     #+END_SRC
 ** Scroll settings
+*** Scroll three lines at a time
     #+BEGIN_SRC emacs-lisp
-    ;; three lines at a time
     (setq mouse-wheel-scroll-amount '(3))
-    
-    ;; dont accelerate scrolling
+    #+END_SRC
+*** Dont accelerate scrolling
+    #+BEGIN_SRC emacs-lisp
     (setq mouse-wheel-progressive-speed nil)
-    
-    ;; scroll window under mouse
-    ;; (setq mouse-wheel-follow-mouse 't)
-    
-    ;; move minimum when cursor exits view, instead of recentering
-    ;; (setq scroll-conservatively 101)
-    
-    ;; keyboard scroll one line at a time
-    ;; (setq scroll-step 1)
+    #+END_SRC
+*** OFF Scroll window under mouse
+    #+BEGIN_SRC emacs-lisp
+    (setq mouse-wheel-follow-mouse 't)
+    #+END_SRC
+*** OFF Move screen minimum when cursor exits view, instead of re-centering
+    #+BEGIN_SRC emacs-lisp
+    (setq scroll-conservatively 101)
+    #+END_SRC
+*** OFF Keyboard scroll one line at a time
+    #+BEGIN_SRC emacs-lisp
+    (setq scroll-step 1)
     #+END_SRC
 * Packages
 ** Package manager setup
@@ -304,6 +310,8 @@
     #+END_SRC
 ** Install and load packages
 *** General
+    General handles key bindings.
+
     #+BEGIN_SRC emacs-lisp
     (use-package general
         :ensure t
@@ -331,7 +339,6 @@
         ;; ============= GENERAL KEYS - MISC - NO INSERT MODE =============
         (general-define-key
         :states '(normal motion emacs)
-        ;; "C-p" 'switch-to-buffer)
         "C-p" 'counsel-projectile
         ;; confirm ivy minibuffer with currently typed value rather than suggestion 
         "C-M-j" 'ivy-immediate-done)
@@ -400,6 +407,7 @@
     #+END_SRC
 *** Which key
     Set up mnemonics menu which appears after a short delay on pressing the configured evil leader key in an ivy minibuffer. Map descriptions to commands defined by General.
+    
     #+BEGIN_SRC emacs-lisp
     (use-package which-key
         :ensure t
@@ -433,7 +441,8 @@
 
     #+END_SRC
 *** Evil mode and friends
-**** Evil Base
+**** Evil Core
+    Core evil package
     #+BEGIN_SRC emacs-lisp
     (use-package evil
         :ensure t
@@ -441,6 +450,7 @@
         :config (define-key evil-normal-state-map "," nil))
     #+END_SRC
 **** Evil Escape
+    Evil-escape lets us define an alternate key combo to enter normal mode. I like =kj=.
     #+BEGIN_SRC emacs-lisp
     (use-package evil-escape
         :ensure t
@@ -449,12 +459,16 @@
         :config (setq-default evil-escape-key-sequence "kj"))
     #+END_SRC
 **** Evil Commentary
+    Evil-commentary allows us to comment things out using the key binds from vim-commentary, like =gcc= for a line, =gc= for a region, etc
     #+BEGIN_SRC emacs-lisp
     (use-package evil-commentary
         :ensure t
         :defer t
         :init (evil-commentary-mode))
-
+    #+END_SRC
+**** Evil Org
+    Evil bindings for org mode
+    #+BEGIN_SRC emacs-lisp
     (use-package evil-org
         :ensure t
         :after org
@@ -467,7 +481,7 @@
                     (org-bullets-mode 1))))
     #+END_SRC
 *** OFF Powerline and airline themes
-    This package adds a lot to emacs boot time, so we leave it out (cancelled) for now.
+    This package adds a lot to emacs boot time, so we leave it out (org mode OFF todo status) for now.
     Options for powerline-default-separator are: alternate, arrow, arrow-fade, bar, box, brace, butt, chamfer, contour, curve, rounded, roundstub, slant, wave, zigzag, nil.
 A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mode-line
     #+BEGIN_SRC emacs-lisp
@@ -500,12 +514,17 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
 
     #+END_SRC
 *** Counsel
+    Counsel provides some additional key bindings to common commands using =completing-read-function=, such as =find-file= (which becomes =counsel-find-file=)
+    
     #+BEGIN_SRC emacs-lisp
     (use-package counsel
         :ensure t
         :defer t)
     #+END_SRC
 *** Projectile and counsel-projectile
+    Projectile lets us jump between files inside a git repository dir (or a dir with a =.projectile= file at its root).
+    Also install counsel-projectile for the additional features when using projectile.
+    
     #+BEGIN_SRC emacs-lisp
     (use-package projectile
         :ensure t
@@ -518,6 +537,7 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
 
     #+END_SRC
 *** Company
+    Company provides nice code completion features. Comes with support for a few languages, and more can be installed.
     #+BEGIN_SRC emacs-lisp
     (use-package company
         :ensure t
@@ -526,6 +546,7 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
         :config (setq company-idle-delay 0.3))
     #+END_SRC
 *** HL Todo
+    Highlight descriptive comment words like =TODO=, =HACK= etc with a more noticable text face
     #+BEGIN_SRC emacs-lisp
     (use-package hl-todo
         :ensure t
@@ -533,6 +554,7 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
         :init (global-hl-todo-mode))
     #+END_SRC
 *** OFF Highlight indent guides
+    Show lines depicting indentation level. Slows down rendering quite a bit, so set to OFF for now.
     #+BEGIN_SRC emacs-lisp
     (use-package highlight-indent-guides
         :ensure t
@@ -540,17 +562,18 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
         :init (setq highlight-indent-guides-method 'character))
     #+END_SRC
 *** Rainbow delimiters
+    Give scope delimiters rainbow colors to more easily determine where we are inside a deeply nested scope. Only use this for elisp at the moment, so only enable it when we load an elisp file via the =emacs-lisp-mode-hook=.
+    
     #+BEGIN_SRC emacs-lisp
     (defun enable-rainbow-delims ()
         (use-package rainbow-delimiters
         :ensure t
         :init (rainbow-delimiters-mode)))
         
-    ;; don't load the rainbow delims package until we open a lisp or elisp file
-    (add-hook 'lisp-mode-hook 'enable-rainbow-delims)
     (add-hook 'emacs-lisp-mode-hook 'enable-rainbow-delims)
     #+END_SRC
-*** Neotree
+*** OFF Neotree
+    Directory browsing in a tree view. Doesn't get used much, so turn it OFF for now.
     #+BEGIN_SRC emacs-lisp
     (use-package neotree
         :ensure t
@@ -608,8 +631,14 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
     ;; remove borders, set height etc
     (custom-set-faces '(mode-line ((t (:box nil :overline nil :underline nil :weight normal :height 100)))))
     #+END_SRC
+** Window split line
+    Change color of line in between split windows
+    #+BEGIN_SRC emacs-lisp
+    (set-face-foreground 'vertical-border "#363636")
+    #+END_SRC
 ** Load theme
    Only one of these should be enabled at a time; the rest should have the OFF todo status so tangle ignores them.
+   
 *** Nimbostratus
     #+BEGIN_SRC emacs-lisp
     (load-theme 'nimbostratus t)
