@@ -60,8 +60,19 @@
           (when (and (string= lang "emacs-lisp")
                      (not (string-match-p ":tangle\\s-+no" args))
                      (not canc))
-            ;; the regex below replaces comment lines, but doesnt get rid of whitespace-only lines. Maybe it's replacing instances with newlines?
-            (add-to-list 'body-list (replace-regexp-in-string "\\(?:^\s+;.+\\|^\s*$\\)" "" body))))))
+            (setq body (replace-regexp-in-string "\\(?:^\s+;.+\\)" "" body))
+            (setq body (replace-regexp-in-string "\\(?:^\s*\n\\)" "" body))
+            (add-to-list 'body-list body)))))
+            ;; (add-to-list 'body-list (replace-regexp-in-string "\\(?:^\s+;.+\\|^\s*$\\)" "" body))))))
+
+
+
+
+
+
+
+
+
 
     (with-temp-file elfile
       (insert ";; *- lexical-binding: t; -*-\n")
