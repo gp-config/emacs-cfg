@@ -129,13 +129,6 @@
    #+BEGIN_SRC emacs-lisp
    (gp-determine-machine)
    #+END_SRC
-** Load GP plugins
-    Load my own plugins from local =./gp/plugins= directory (must be in load path - should be done by init.el)
-    
-    #+BEGIN_SRC emacs-lisp
-    ;; session manager
-    (require 'sessionManager)
-    #+END_SRC
 * Util Functions
     Switch to tabs mode
     #+BEGIN_SRC emacs-lisp
@@ -264,6 +257,13 @@
 *** OFF Keyboard scroll one line at a time
     #+BEGIN_SRC emacs-lisp
     (setq scroll-step 1)
+    #+END_SRC
+** Load GP plugins
+    Load my own plugins from local =./gp/plugins= directory (must be in load path - should be done by init.el)
+    
+    #+BEGIN_SRC emacs-lisp
+    ;; session manager
+    (require 'sessionManager)
     #+END_SRC
 * Packages
 ** Package manager setup
