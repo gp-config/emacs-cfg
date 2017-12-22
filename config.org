@@ -263,7 +263,7 @@
     
     #+BEGIN_SRC emacs-lisp
     ;; session manager
-    (require 'sessionManager)
+    (require 'sesh)
     #+END_SRC
 * Packages
 ** Package manager setup
