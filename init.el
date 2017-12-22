@@ -1,5 +1,8 @@
 ;; initial load path setup
 
+(defvar my-start-time (current-time)
+  "Time when Emacs was started")
+
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
@@ -23,9 +26,7 @@
 (defun gp-tangle-section-cancelled ()
   "checks if previous section header was OFF"
   (save-excursion
-    (if (re-search-backward "^\\*+\\s-+\\(.*?\\)?\\s-*$" nil t)
-        (progn
-          ;; message "FOUND '%s'" (match-string 1))
+    (if (re-search-backward "^\\*+\\s-+\\(.*?\\)?\\s-*$" nil t) (progn ;; message "FOUND '%s'" (match-string 1))
           (string-prefix-p "OFF" (match-string 1)))
       nil)))
 
@@ -60,24 +61,15 @@
           (when (and (string= lang "emacs-lisp")
                      (not (string-match-p ":tangle\\s-+no" args))
                      (not canc))
-            (setq body (replace-regexp-in-string "\\(?:^\s+;.+\\)" "" body))
-            (setq body (replace-regexp-in-string "\\(?:^\s*\n\\)" "" body))
+            ;; remove commented lines
+            (setq body (replace-regexp-in-string "^\s+;.+" "" body))
+            ;; remove whitespace-only lines
+            (setq body (replace-regexp-in-string "^\s*\n" "" body))
             (add-to-list 'body-list body)))))
-            ;; (add-to-list 'body-list (replace-regexp-in-string "\\(?:^\s+;.+\\|^\s*$\\)" "" body))))))
-
-
-
-
-
-
-
-
-
 
     (with-temp-file elfile
       (insert ";; *- lexical-binding: t; -*-\n")
       (insert (format ";; Don't edit this file, edit %s instead ...\n\n" orgfile))
-      ;; (insert (apply 'concat (reverse body-list)))
       (apply 'insert (reverse body-list)))))
 
 (defun gp-load-file (fname)
@@ -107,3 +99,4 @@ it will be created. After this, the normal loading logic happens."
     (load elfile nil 'nomessage)))
 
 (gp-load-file "config")
+(message "Start up time %.2fs" (float-time (time-subtract (current-time) my-start-time)))
