@@ -524,17 +524,12 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
 *** Projectile and counsel-projectile
     Projectile lets us jump between files inside a git repository dir (or a dir with a =.projectile= file at its root).
     Also install counsel-projectile for the additional features when using projectile.
-    
     #+BEGIN_SRC emacs-lisp
     (use-package projectile
         :ensure t
         :defer t
         :init
-            (use-package counsel-projectile :ensure t)
-        :config
-            (projectile-global-mode)
-            (counsel-projectile-on))
-
+            (use-package counsel-projectile :ensure t))
     #+END_SRC
 *** Company
     Company provides nice code completion features. Comes with support for a few languages, and more can be installed.
