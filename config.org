@@ -7,7 +7,7 @@
 ** About
   My emacs + evil mode (vim keys!) configuration, written using [[https://orgmode.org/][Org mode]].
 
-  When emacs starts, it loads =init.el=. It loads and runs through this org file, extracts all the emacs lisp source code blocks, and writes them to a file (=config.el=). Emacs will then load =config.el= and byte compile it for future runs.
+  When emacs starts, it loads =init.el= like normal. The code in =init.el= loads this =config.org= file, extracts all the emacs lisp source code blocks, and writes them to a file (=config.el=). Emacs will then load =config.el= and byte compile it for future runs. There's also some fancy stuff happening to check last modified dates and load compiled files if no changes have happened in order to speed things up (thanks to [[https://bitbucket.org/holgerschurig/emacsconf][Holger Schurig]], whose public emacs config repo was the source of most of this tangling functionality!)
   
   Since the config.el file is composed of source blocks extracted from this org file, it's very easy to turn off bits of configuration. To exclude a block, either mark BEGIN-SRC lines with =:tangle no=, or apply the custom org TODO state of "OFF" to the org outline that contains the source block.
   
@@ -16,17 +16,17 @@
   Disable tangle:
   #+BEGIN_SRC text
   * My Outline
-      \#+BEGIN_SRC emacs-lisp :tangle no
+      # +BEGIN_SRC emacs-lisp :tangle no
       ;; code here
-      \#+END_SRC
+      # +END_SRC
   #+END_SRC
   
   Turn off parent outline:
   #+BEGIN_SRC text
   * OFF My Outline
-      \#+BEGIN_SRC emacs-lisp
+      # +BEGIN_SRC emacs-lisp
       ;; code here
-      \#+END_SRC
+      # +END_SRC
     #+END_SRC
 ** Install
   Clone this repo into =~/.emacs.d= and launch emacs (ensure that no =~/.emacs= file exists to avoid conflicts).
