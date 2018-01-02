@@ -1,10 +1,43 @@
-#+TITLE: Geordie Powers - Emacs Configuration
+#+TITLE: gp | emacs configuration
 # Adapted from Holger Schurig's config. https://bitbucket.org/holgerschurig/emacsconf
 #+BABEL: :cache yes
 #+PROPERTY: header-args :tangle yes
 
+* Info
+** About
+  My emacs + evil mode (vim keys!) configuration, written using [[https://orgmode.org/][Org mode]].
+
+  When emacs starts, it loads =init.el=. It loads and runs through this org file, extracts all the emacs lisp source code blocks, and writes them to a file (=config.el=). Emacs will then load =config.el= and byte compile it for future runs.
+  
+  Since the config.el file is composed of source blocks extracted from this org file, it's very easy to turn off bits of configuration. To exclude a block, either mark BEGIN-SRC lines with =:tangle no=, or apply the custom org TODO state of "OFF" to the org outline that contains the source block.
+  
+  An example of both:
+
+  Disable tangle:
+  #+BEGIN_SRC text
+  * My Outline
+      #+BEGIN_SRC emacs-lisp :tangle no
+      ;; code here
+      #+END_SRC
+  #+END_SRC
+  
+  Turn off parent outline:
+  #+BEGIN_SRC text
+  * OFF My Outline
+      #+BEGIN_SRC emacs-lisp
+      ;; code here
+      #+END_SRC
+  #+END_SRC
+** Install
+  Clone this repo into =~/.emacs.d= and launch emacs (ensure that no =~/.emacs= file exists to avoid conflicts).
+
+  #+BEGIN_SRC sh :tangle no
+    git clone https://github.com/GeordieP/emacs-cfg.git $HOME/.emacs.d
+  #+END_SRC
+  
+  This repo is a fair starting point for anyone looking to try emacs + evil mode, but there's probably many things in here you don't need. I recommend reading through (it's really not that long!) and stripping stuff out.
 * Debug
-** Open backtrace buffer when something goes wrong
+** OFF Open backtrace buffer when something goes wrong
     #+BEGIN_SRC emacs-lisp
     (set 'debug-on-error t)
     #+END_SRC
