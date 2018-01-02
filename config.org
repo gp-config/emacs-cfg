@@ -396,8 +396,8 @@
             "ec" 'execute-extended-command
             "ee" 'eval-expression
             ;; s - SESSION
-            "ss" 'gp-session-save
-            "so" 'gp-session-load
+            "ss" 'sesh-write-opened-files
+            "so" 'sesh-load-files
             ;; "sa" ;; TODO: toggle session auto-save
             ;; h - HELP
             ;; h d - HELP > DESCRIBE
