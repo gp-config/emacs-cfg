@@ -16,18 +16,18 @@
   Disable tangle:
   #+BEGIN_SRC text
   * My Outline
-      #+BEGIN_SRC emacs-lisp :tangle no
+      \#+BEGIN_SRC emacs-lisp :tangle no
       ;; code here
-      #+END_SRC
+      \#+END_SRC
   #+END_SRC
   
   Turn off parent outline:
   #+BEGIN_SRC text
   * OFF My Outline
-      #+BEGIN_SRC emacs-lisp
+      \#+BEGIN_SRC emacs-lisp
       ;; code here
-      #+END_SRC
-  #+END_SRC
+      \#+END_SRC
+    #+END_SRC
 ** Install
   Clone this repo into =~/.emacs.d= and launch emacs (ensure that no =~/.emacs= file exists to avoid conflicts).
 
