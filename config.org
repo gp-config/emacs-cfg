@@ -77,7 +77,6 @@
    Configure custom file. This is where emacs will place all of its auto-generated config; anything that's customized in the editor or otherwise needs to be remembered by Emacs between sessions.
     
     Create file if it doesn't already exist
-    
     #+BEGIN_SRC emacs-lisp
     (setq custom-file-path (concat user-emacs-directory "auto_custom.el"))
     (unless (file-exists-p custom-file-path) (write-region "" nil custom-file-path))
@@ -103,80 +102,89 @@
     Switch to tabs mode
     #+BEGIN_SRC emacs-lisp
     (defun gp-indent-use-tabs () (interactive)
-        "Use tabs for indentation"
-        (setq indent-tabs-mode t)
-        (setq-default indent-tabs-mode t))
+           "Use tabs for indentation"
+           (setq-local indent-tabs-mode t)
+           (setq-default indent-tabs-mode t))
     #+END_SRC
 
     Switch to spaces mode
     #+BEGIN_SRC emacs-lisp
     (defun gp-indent-use-spaces () (interactive)
-        "Use spaces for indentation"
-        (setq indent-tabs-mode nil)
-        (setq-default indent-tabs-mode nil))
+           "Use spaces for indentation"
+           (setq-local indent-tabs-mode nil)
+           (setq-default indent-tabs-mode nil))
     #+END_SRC
 ** Set Font
    #+BEGIN_SRC emacs-lisp
    (defun gp-set-font (name size &optional weight) (interactive)
-          (let ((nameAndSize (concat name "-" size)))
-            (set-face-attribute 'default nil :font nameAndSize)
+          (let (;; "fontName-size"
+                (nameAndSize (concat name "-" size))
+                ;; use Regular as defualt weight
+                (weight (or weight "Regular")))
+            (set-face-attribute 'default nil :font nameAndSize :weight (intern weight))
             (add-to-list 'default-frame-alist '(font . nameAndSize))))
    #+END_SRC
 * Machine-specific Configuration
 ** Machine Setup: Unrecognized (fallback option)
    #+BEGIN_SRC emacs-lisp
-     (defun gp-setup-machine-unrecognized ()
-         (defun gp-machine-set-font ()
-             (gp-set-font "Monospace" "10")))
+   (defun gp-setup-machine-unrecognized ()
+     (defun gp-machine-set-font ()
+       (gp-set-font "Monospace" "10")))
    #+END_SRC
 ** Machine Setup: Desktop PC
    #+BEGIN_SRC emacs-lisp
-     (defun gp-setup-machine-desktop ()
-         (defun gp-machine-set-font ()
-             (gp-set-font "Droid Sans Mono for Powerline" "11" "Medium")))
+   (defun gp-setup-machine-desktop ()
+     (defun gp-machine-set-font ()
+       (gp-set-font "Droid Sans Mono for Powerline" "11" "Medium")))
    #+END_SRC
 ** Machine Setup: MacBook Pro
    #+BEGIN_SRC emacs-lisp
-       (defun gp-setup-machine-macbook ()
-           ;; keep menu bar enabled on mac as it's not annoying
-           (menu-bar-mode -1)
-           ;; fix colors in powerline separators
-           ;; (macOS SRGB issue with certain versions of emacs)
-           ;; two fixes here:
-           ;;
-           ;; disable srgb color space
-           ; (setq ns-use-srgb-colorspace nil)
-           ;; or
-           ;; use built-in powerline patch (recommended):
-           ; https://github.com/milkypostman/powerline/issues/54#issuecomment-310867163
-           (defvar powerline-image-apple-rgb t)
-           (defun gp-machine-set-font ()
-               (gp-set-font "Source Code Pro for Powerline" "16" "Regular")))
+   (defun gp-setup-machine-macbook ()
+     ;; keep menu bar enabled on mac as it's not annoying
+     (menu-bar-mode -1)
+
+     ;; fix colors in powerline separators
+     ;; (macOS SRGB issue with certain versions of emacs)
+     ;;
+     ;; Two fixes here:
+     ;; disable srgb color space (not ideal, has an effect on colors outside of powerline):
+     ;; (setq ns-use-srgb-colorspace nil)
+     ;; ;; OR ;; ;;
+     ;; use built-in powerline patch (recommended):
+     ;; https://github.com/milkypostman/powerline/issues/54#issuecomment-310867163
+     (defvar powerline-image-apple-rgb t)
+
+     ;; set font
+     (defun gp-machine-set-font ()
+       (gp-set-font "Source Code Pro for Powerline" "16")))
    #+END_SRC
 ** Machine Setup: Work laptop
    #+BEGIN_SRC emacs-lisp
-     (defun gp-setup-machine-toshiba ()
-         (defun gp-machine-set-font ()
-             (gp-set-font "Droid Sans Mono Dotted for Powerline" "11")))
+   (defun gp-setup-machine-toshiba ()
+     (defun gp-machine-set-font ()
+       (gp-set-font "Droid Sans Mono Dotted for Powerline" "11")))
    #+END_SRC
 ** Determine current machine
    Figure out which machine we're on and call the appropriate setup function.
    If we don't recognize the machine name, call =unrecognized= to set up defaults for otherwise machine-dependant settings.
     
    #+BEGIN_SRC emacs-lisp
-     (defun gp-determine-machine ()
-         (cond
-         ;; macbook pro
-         ((string-equal (system-name) "Geordies-MacBook-Pro.local") (gp-setup-machine-macbook))
+   (defun gp-determine-machine ()
+     (cond
+      ;; macbook pro
+      ((string-equal (system-name) "Geordies-MacBook-Pro.local")
+       (gp-setup-machine-macbook))
 
-         ;; work laptop
-         ((string-equal (system-name) "gp-toshiba") (gp-setup-machine-toshiba))
+      ;; work laptop
+      ((string-equal (system-name) "gp-toshiba")
+       (gp-setup-machine-toshiba))
 
-         ;; desktop pc
-         ((string-equal (system-name) "gp-desktop") (gp-setup-machine-desktop))
+      ;; desktop pc
+      ((string-equal (system-name) "gp-desktop")
+       (gp-setup-machine-desktop))
 
-         ;; default case - unrecognized
-         (t (gp-setup-machine-unrecognized))))
+      ;; default case - unrecognized
+      (t (gp-setup-machine-unrecognized))))
    #+END_SRC
     
    Call the function right away to perform machine setup
@@ -189,9 +197,9 @@
 *** Disable bits of the interface
     Turn off the native window toolbar, scrollbar, and menu bar
     #+BEGIN_SRC emacs-lisp
-        (tool-bar-mode -1)
-        (scroll-bar-mode -1)
-        (menu-bar-mode -1)
+    (tool-bar-mode -1)
+    (scroll-bar-mode -1)
+    (menu-bar-mode -1)
     #+END_SRC
 *** OFF Line numbers
     Enable line numbers, and add a bit of spacing around the number
@@ -212,7 +220,8 @@
     Set fringes to 1px. Use =set-fringe-style= command to change it within a session.
     
     #+BEGIN_SRC emacs-lisp
-    (setq default-frame-alist (nconc default-frame-alist '((left-fringe . 1) (right-fringe . 1))))
+    (setq default-frame-alist
+          (nconc default-frame-alist '((left-fringe . 1) (right-fringe . 1))))
     #+END_SRC
 *** Disable cursor blinking
     #+BEGIN_SRC emacs-lisp
@@ -238,7 +247,6 @@
 ** Indentation
     Use spaces by default.
     Call functions =gp-indent-use-spaces= and =gp-indent-use-tabs= to switch style for current session.
-    
     #+BEGIN_SRC emacs-lisp
     (setq-default indent-tabs-mode nil)
     #+END_SRC
@@ -249,7 +257,6 @@
     (setq-default evil-shift-width 4)
     (setq-default js-indent-level 4)
     #+END_SRC
-    
     Tabs and evil mode shifts set to 2 spaces wide in certain modes (See =Mode Hooks= section)
 ** Braces, parens, quotes, etc
     Auto-close braces, parens, quotes, etc
@@ -267,7 +274,8 @@
     #+BEGIN_SRC emacs-lisp
     (require 'dired)
     (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
-    (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))
+    (define-key dired-mode-map (kbd "^") (lambda () (interactive)
+                                           (find-alternate-file "..")))
     (put 'dired-find-alternate-file 'disabled nil)
     #+END_SRC
 ** Org Mode configuration
@@ -275,8 +283,7 @@
 
     #+BEGIN_SRC emacs-lisp
     (setq org-todo-keywords
-        '((sequence "TODO(t)" "DOING(d!)" "|" "DONE(x)")
-        (sequence "OFF(o)")))
+          '((sequence "TODO(t)" "DOING(d!)" "DONE(x)" "|" "OFF(o)")))
     #+END_SRC
    
     When in an org file with source blocks, apply syntax highlighting to the blocks
@@ -332,30 +339,28 @@
     (add-to-list 'package-archives gnu t)
 
     (unless (and (file-exists-p "~/.emacs.d/elpa/archives/gnu")
-        (file-exists-p "~/.emacs.d/elpa/archives/melpa")
-        (file-exists-p "~/.emacs.d/elpa/archives/melpa-stable"))
-            (package-refresh-contents))
+                 (file-exists-p "~/.emacs.d/elpa/archives/melpa")
+                 (file-exists-p "~/.emacs.d/elpa/archives/melpa-stable"))
+      (package-refresh-contents))
 
     ;; evaluate the package list and install missing packages
     (defun packages-install (&rest packages)
-        ; (message "running packages-install")
-        (mapc (lambda (package)
-            (let ((name (car package))
-                (repo (cdr package)))
+      (mapc (lambda (package)
+              (let ((name (car package))
+                    (repo (cdr package)))
                 (when (not (package-installed-p name))
-                (let ((package-archives (list repo)))
-                (package-initialize)
-                (package-install name)))))
+                  (let ((package-archives (list repo)))
+                    (package-initialize)
+                    (package-install name)))))
             packages)
-        (package-initialize)
-        (delete-other-windows))
+      (package-initialize)
+      (delete-other-windows))
 
     ;; call packages-install for 
     (condition-case nil
         (packages-install (cons 'use-package melpa))
-        (error
-        (package-refresh-contents)
-        (packages-install (cons 'use-package melpa))))
+      (error (package-refresh-contents)
+             (packages-install (cons 'use-package melpa))))
     #+END_SRC
 ** Install and load packages
 *** General
@@ -687,22 +692,28 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
    
     #+BEGIN_SRC emacs-lisp
     (setq
-        evil-normal-state-tag " n"
-        evil-insert-state-tag " i"
-        evil-visual-state-tag " v"
-        mode-line-position '((line-number-mode ("%l")))
-        evil-mode-line-format '(before . mode-line-front-space))
+     evil-normal-state-tag " n"
+     evil-normal-state-tag " n"
+     evil-insert-state-tag " i"
+     evil-visual-state-tag " v"
+     mode-line-position '((line-number-mode ("%l")))
+     evil-mode-line-format '(before . mode-line-front-space))
 
     (setq-default mode-line-format '("%e"
-        mode-line-front-space
-        evil-mode-line-tag " "
-        mode-line-modified " "
-        mode-line-position " "
-        mode-line-buffer-identification
-        mode-line-end-spaces))
+     mode-line-front-space
+     evil-mode-line-tag " "
+     mode-line-modified " "
+     mode-line-position " "
+     mode-line-buffer-identification
+     mode-line-end-spaces))
 
     ;; remove borders, set height etc
-    (custom-set-faces '(mode-line ((t (:box nil :overline nil :underline nil :weight normal :height 100)))))
+    (custom-set-faces '(mode-line ((t (:box nil
+                                       :overline nil
+                                       :underline nil
+                                       :weight normal
+                                       :height 100)))))
+
     #+END_SRC
 ** Window split line
     Change color of line in between split windows
