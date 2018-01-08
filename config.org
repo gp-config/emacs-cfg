@@ -48,30 +48,29 @@
    - *Lock Files* are created when Emacs visits a file, in order to prevent other instances of Emacs from visiting the same file and creating conflicts in the file contents. They look like =.#filename.ext=
 
    #+BEGIN_SRC emacs-lisp
-   (let* ((dir-file-backups (concat user-emacs-directory "file_backups/"))
-       (dir-file-autosaves (concat dir-file-backups "autosaves/")))
+     (let* ((dir-file-backups (concat user-emacs-directory "fille_backups/"))
+            (dir-file-autosaves(concat dir-file-backups "autosaves/")))
 
-   ;; create file backup dirs if they dont exist
-   (unless (file-exists-p dir-file-backups) (make-directory dir-file-backups))
-   (unless (file-exists-p dir-file-autosaves) (make-directory dir-file-autosaves))
+       ;; create file backup dirs if they dont exist
+       (unless (file-exists-p dir-file-backups) (make-directory dir-file-backups))
+       (unless (file-exists-p dir-file-autosaves_ (make-directory dir-file-autosaves)))
 
-   ;; file backup configuration
-   (setq
-       backup-by-copying t
-       delete-old-versions t
-       kept-new-versions 2
-       kept-old-versions 1
-       version-control nil)
+       (setq
+        backup-by-copying t
+        delete-old-versions t
+        kept-new-versions 2
+        kept-old-versions 1
+        version-control nil)
 
-   (setq
-       ;; file to store all active autosaved file names
-       auto-save-list-file-name (concat dir-file-autosaves "auto-save-list")
-       ;; directory to store autosaves ( #filename.ext# )
-       auto-save-file-name-transforms `((".*" ,(concat dir-file-autosaves "\\1") t))
-       ;; directory for backup files ( filename.ext~ )
-       backup-directory-alist `(("." . ,dir-file-backups))
-       ;; disable lock files ( .#filename.extension )
-       create-lockfiles nil))
+       (setq
+        ;; file to store all active autosaved file names
+        auto-save-list-file-name (concat dir-file-autosaves "auto-save-list")
+        ;; directory to store autosaves ( #filename.ext#
+        auto-save-file-name-transforms `((".*" ,(concat dir-file-autosaves "\\1") t))
+        ;; directory for backup files ( filename.ext~ )
+        backup-directory-alist `(("." . ,dir-file-backups))
+        ;; disable lock files ( .#filename.ext )
+        create-lockfiles nil))
    #+END_SRC
     
 ** Emacs custom file
@@ -99,12 +98,42 @@
     #+BEGIN_SRC emacs-lisp
     (setq-default require-final-newline t)
     #+END_SRC
+* Util Functions
+** Indentation modes
+    Switch to tabs mode
+    #+BEGIN_SRC emacs-lisp
+    (defun gp-indent-use-tabs () (interactive)
+        "Use tabs for indentation"
+        (setq indent-tabs-mode t)
+        (setq-default indent-tabs-mode t))
+    #+END_SRC
+
+    Switch to spaces mode
+    #+BEGIN_SRC emacs-lisp
+    (defun gp-indent-use-spaces () (interactive)
+        "Use spaces for indentation"
+        (setq indent-tabs-mode nil)
+        (setq-default indent-tabs-mode nil))
+    #+END_SRC
+** Set Font
+   #+BEGIN_SRC emacs-lisp
+   (defun gp-set-font (name size &optional weight) (interactive)
+          (let ((nameAndSize (concat name "-" size)))
+            (set-face-attribute 'default nil :font nameAndSize)
+            (add-to-list 'default-frame-alist '(font . nameAndSize))))
+   #+END_SRC
 * Machine-specific Configuration
+** Machine Setup: Unrecognized (fallback option)
+   #+BEGIN_SRC emacs-lisp
+     (defun gp-setup-machine-unrecognized ()
+         (defun gp-machine-set-font ()
+             (gp-set-font "Monospace" "10")))
+   #+END_SRC
 ** Machine Setup: Desktop PC
    #+BEGIN_SRC emacs-lisp
-       (defun gp-setup-machine-desktop ()
-           (defun gp-set-font () (interactive)
-           (set-face-attribute 'default nil :font "Droid Sans Mono for Powerline-11" :weight 'Medium)))
+     (defun gp-setup-machine-desktop ()
+         (defun gp-machine-set-font ()
+             (gp-set-font "Droid Sans Mono for Powerline" "11" "Medium")))
    #+END_SRC
 ** Machine Setup: MacBook Pro
    #+BEGIN_SRC emacs-lisp
@@ -121,40 +150,33 @@
            ;; use built-in powerline patch (recommended):
            ; https://github.com/milkypostman/powerline/issues/54#issuecomment-310867163
            (defvar powerline-image-apple-rgb t)
-
-           (defun gp-set-font () (interactive)
-               (set-face-attribute 'default nil :font "Source Code Pro for Powerline-16" :weight 'Regular)))
+           (defun gp-machine-set-font ()
+               (gp-set-font "Source Code Pro for Powerline" "16" "Regular")))
    #+END_SRC
 ** Machine Setup: Work laptop
    #+BEGIN_SRC emacs-lisp
-   (defun gp-setup-machine-toshiba ()
-       (defun gp-set-font () (interactive)
-               (set-face-attribute 'default nil :font "Droid Sans Mono Dotted for Powerline-11" :weight 'Regular)
-               (add-to-list 'default-frame-alist '(font . "Droid Sans Mono Dotted for Powerline-11"))))
-   #+END_SRC
-** Machine Setup: Unrecognized (fallback option)
-   #+BEGIN_SRC emacs-lisp
-   (defun gp-set-font () (interactive)
-       (set-face-attribute 'default nil :font "Monospace-10" :weight 'Regular))
+     (defun gp-setup-machine-toshiba ()
+         (defun gp-machine-set-font ()
+             (gp-set-font "Droid Sans Mono Dotted for Powerline" "11")))
    #+END_SRC
 ** Determine current machine
    Figure out which machine we're on and call the appropriate setup function.
    If we don't recognize the machine name, call =unrecognized= to set up defaults for otherwise machine-dependant settings.
     
    #+BEGIN_SRC emacs-lisp
-       (defun gp-determine-machine ()
-           (cond
-           ;; macbook pro
-           ((string-equal (system-name) "Geordies-MacBook-Pro.local") (gp-setup-machine-macbook))
+     (defun gp-determine-machine ()
+         (cond
+         ;; macbook pro
+         ((string-equal (system-name) "Geordies-MacBook-Pro.local") (gp-setup-machine-macbook))
 
-           ;; work laptop
-           ((string-equal (system-name) "gp-toshiba") (gp-setup-machine-toshiba))
+         ;; work laptop
+         ((string-equal (system-name) "gp-toshiba") (gp-setup-machine-toshiba))
 
-           ;; desktop pc
-           ((string-equal (system-name) "gp-desktop") (gp-setup-machine-desktop))
+         ;; desktop pc
+         ((string-equal (system-name) "gp-desktop") (gp-setup-machine-desktop))
 
-           ;; default case - unrecognized
-           (t (gp-setup-machine-unrecognized))))
+         ;; default case - unrecognized
+         (t (gp-setup-machine-unrecognized))))
    #+END_SRC
     
    Call the function right away to perform machine setup
@@ -162,22 +184,6 @@
    #+BEGIN_SRC emacs-lisp
    (gp-determine-machine)
    #+END_SRC
-* Util Functions
-    Switch to tabs mode
-    #+BEGIN_SRC emacs-lisp
-    (defun gp-indent-use-tabs () (interactive)
-        "Use tabs for indentation"
-        (setq indent-tabs-mode t)
-        (setq-default indent-tabs-mode t))
-    #+END_SRC
-
-    Switch to spaces mode
-    #+BEGIN_SRC emacs-lisp
-    (defun gp-indent-use-spaces () (interactive)
-        "Use spaces for indentation"
-        (setq indent-tabs-mode nil)
-        (setq-default indent-tabs-mode nil))
-    #+END_SRC
 * Basic Configuration
 ** Emacs UI
 *** Disable bits of the interface
@@ -224,10 +230,10 @@
     (setq frame-title-format "%b")
     #+END_SRC
 *** Set font
-    Set preferred font for current machine by calling function =gp-set-font=, which is a function defined based on which machine our Emacs instance is running on (see *Machine specific configuration* section)
+    Set preferred font for current machine by calling function =gp-machine-set-font=, which is a function defined based on which machine our Emacs instance is running on (see *Machine specific configuration* section)
     
     #+BEGIN_SRC emacs-lisp
-    (gp-set-font)
+    (gp-machine-set-font)
     #+END_SRC
 ** Indentation
     Use spaces by default.
@@ -243,6 +249,8 @@
     (setq-default evil-shift-width 4)
     (setq-default js-indent-level 4)
     #+END_SRC
+    
+    Tabs and evil mode shifts set to 2 spaces wide in certain modes (See =Mode Hooks= section)
 ** Braces, parens, quotes, etc
     Auto-close braces, parens, quotes, etc
     #+BEGIN_SRC emacs-lisp
@@ -508,11 +516,6 @@
         :after org
         :config
         (use-package org-bullets :ensure t)
-        (add-hook 'org-mode-hook 'evil-org-mode)
-        (add-hook 'evil-org-mode-hook
-                    (lambda ()
-                    (evil-org-set-key-theme '(textobjects insert navigation shift todo))
-                    (org-bullets-mode 1))))
     #+END_SRC
 *** OFF Powerline and airline themes
     This package adds a lot to emacs boot time, so we leave it out (org mode OFF todo status) for now.
@@ -601,13 +604,13 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
 *** Rainbow delimiters
     Give scope delimiters rainbow colors to more easily determine where we are inside a deeply nested scope. Only use this for elisp at the moment, so only enable it when we load an elisp file via the =emacs-lisp-mode-hook=.
     
+    The function defined here is called by lisp mode hooks (See =Mode Hooks= section)
+    
     #+BEGIN_SRC emacs-lisp
     (defun enable-rainbow-delims ()
         (use-package rainbow-delimiters
         :ensure t
         :init (rainbow-delimiters-mode)))
-        
-    (add-hook 'emacs-lisp-mode-hook 'enable-rainbow-delims)
     #+END_SRC
 *** OFF Neotree
     Directory browsing in a tree view. Doesn't get used much, so turn it OFF for now.
@@ -636,6 +639,31 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
         :ensure t
         :defer t)
     #+END_SRC
+*** Autothemer
+    Theming tools
+    #+BEGIN_SRC emacs-lisp
+    (use-package autothemer
+        :ensure t
+        :defer t)
+    #+END_SRC
+* Mode Hooks
+** Org mode & Evil Org mode
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'org-mode-hook 'evil-org-mode)
+
+     (add-hook 'evil-org-mode-hook
+               (lambda ()
+                 (evil-org-set-key-theme '(textobjects insert navigation shift todo))
+                 (org-bullets-mode 1))
+   #+END_SRC
+** Emacs Lisp Mode
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'emacs-lisp-mode-hook
+               (lambda ()
+                 (enable-rainbow-delims)
+                 (setq-local tab-width 2)
+                 (setq-local evil-shift-width 2)))
+   #+END_SRC
 * Themes
 ** Mode line setup
     This mode line is pretty minimal. It's formatted as follows:
@@ -684,6 +712,11 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
     #+BEGIN_SRC emacs-lisp
     (load-theme 'brown t)
     #+END_SRC
-
-
-
+*** OFF @aatxe/elegance
+    #+BEGIN_SRC emacs-lisp
+    (load-theme 'elegance t)
+    #+END_SRC
+*** OFF @aatxe/awemacs
+    #+BEGIN_SRC emacs-lisp
+    (load-theme 'awemacs t)
+    #+END_SRC
