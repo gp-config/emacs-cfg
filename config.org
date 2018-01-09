@@ -134,7 +134,7 @@
    (defun gp-setup-machine-desktop ()
      (defun gp-machine-set-font ()
        ;; (gp-set-font "Droid Sans Mono for Powerline" "11" "Medium")))
-       (gp-set-font "Hack" "11")))
+       (gp-set-font "Hack" "12")))
    #+END_SRC
 ** Machine Setup: MacBook Pro
    #+BEGIN_SRC emacs-lisp
@@ -399,18 +399,6 @@
        "C-M-j" 'ivy-immediate-done)
 
       ;; =============
-      ;; GENERAL KEYS - NEOTREE
-      ;; =============
-      (general-define-key
-       :states '(normal emacs)
-       :keymaps 'neotree-mode-map
-
-       "TAB" 'neotree-enter
-       "SPC" 'neotree-quick-look
-       "q" 'neotree-hide
-       "RET" 'neotree-enter)
-
-      ;; =============
       ;; GENERAL KEYS - VIM
       ;; =============
       (general-define-key
@@ -456,7 +444,6 @@
        "ts" 'whitespace-mode
        "tis" 'gp-indent-use-spaces
        "tit" 'gp-indent-use-tabs
-       "tt" 'neotree-toggle
 
        ;; e - EXECUTE
        "et" 'gp-launch-terminal
@@ -500,7 +487,6 @@
       ;; TOGGLES
       (which-key-add-key-based-replacements ",t" "UI/Visual Toggles...")
       (which-key-add-key-based-replacements ",tn" "Line Numbers (Toggle)")
-      (which-key-add-key-based-replacements ",tt" "(Neo)Tree View Toggle")
       (which-key-add-key-based-replacements ",th" "Highlight Current Line (Toggle)")
       (which-key-add-key-based-replacements ",tw" "Word Wrap (Toggle)")
 
@@ -639,13 +625,6 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
       (use-package rainbow-delimiters
       :ensure t
       :init (rainbow-delimiters-mode)))
-    #+END_SRC
-*** OFF Neotree
-    Directory browsing in a tree view. Doesn't get used much, so turn it OFF for now.
-    #+BEGIN_SRC emacs-lisp
-    (use-package neotree
-      :ensure t
-      :defer t)
     #+END_SRC
 *** Language-specific modes
 **** Rust
