@@ -532,8 +532,7 @@
     (use-package evil-org
       :ensure t
       :after org
-      :config
-      (use-package org-bullets :ensure t))
+      :config (use-package org-bullets :ensure t))
     #+END_SRC
 *** OFF Powerline and airline themes
     This package adds a lot to emacs boot time, so we leave it out (org mode OFF todo status) for now.
@@ -565,7 +564,6 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
       (setq enable-recursive-minibuffers t)
       (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
       (setq ivy-initial-inputs-alist nil))
-
     #+END_SRC
 *** Counsel
     Counsel provides some additional key bindings to common commands using =completing-read-function=, such as =find-file= (which becomes =counsel-find-file=)
@@ -588,8 +586,7 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
     (use-package projectile
       :ensure t
       :defer t
-      :init
-      (use-package counsel-projectile :ensure t))
+      :init (use-package counsel-projectile :ensure t))
     #+END_SRC
 *** Company
     Company provides nice code completion features. Comes with support for a few languages, and more can be installed.
@@ -597,7 +594,6 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
     (use-package company
       :ensure t
       :defer t
-      :init (add-hook 'after-init-hook 'global-company-mode)
       :config (setq company-idle-delay 0.3))
     #+END_SRC
 *** HL Todo
@@ -619,14 +615,22 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
 *** Rainbow delimiters
     Give scope delimiters rainbow colors to more easily determine where we are inside a deeply nested scope. Only use this for elisp at the moment, so only enable it when we load an elisp file via the =emacs-lisp-mode-hook=.
     
-    The function defined here is called by lisp mode hooks (See =Mode Hooks= section)
+    This package doesn't get enabled until a lisp file is loaded. (See =Mode Hooks= section)
     #+BEGIN_SRC emacs-lisp
-    (defun enable-rainbow-delims ()
-      (use-package rainbow-delimiters
+    (use-package rainbow-delimiters
+      :defer t
       :ensure t
-      :init (rainbow-delimiters-mode)))
+      :config (custom-set-faces
+             '(rainbow-delimiters-depth-1-face ((t (:foreground "dark orange"))))
+             '(rainbow-delimiters-depth-2-face ((t (:foreground "deep pink")))) 
+             '(rainbow-delimiters-depth-3-face ((t (:foreground "chartreuse")))) 
+             '(rainbow-delimiters-depth-4-face ((t (:foreground "deep sky blue")))) 
+             '(rainbow-delimiters-depth-5-face ((t (:foreground "yellow")))) 
+             '(rainbow-delimiters-depth-6-face ((t (:foreground "orchid")))) 
+             '(rainbow-delimiters-depth-7-face ((t (:foreground "spring green")))) 
+             '(rainbow-delimiters-depth-8-face ((t (:foreground "sienna1"))))))
     #+END_SRC
-*** Language-specific modes
+*** Language modes
 **** Rust
     #+BEGIN_SRC emacs-lisp
     (use-package rust-mode
@@ -653,24 +657,33 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
       :ensure t
       :defer t)
     #+END_SRC
-* Mode Hooks
-** Org mode & Evil Org mode
-   #+BEGIN_SRC emacs-lisp
-   (add-hook 'org-mode-hook 'evil-org-mode)
+* Hooks
+** Lifecycle Hooks
+*** Init
+    Enable company mode
+    #+BEGIN_SRC emacs-lisp
+    (add-hook 'after-init-hook 'global-company-mode)
+    #+END_SRC
+** Mode Hooks
+*** Org mode & Evil Org Mode
+    When we enter org mode, also load evil-org and org-bullets mode, and set up evil-org keys
+    #+BEGIN_SRC emacs-lisp
+    (add-hook 'org-mode-hook 'evil-org-mode)
 
-   (add-hook 'evil-org-mode-hook
-             (lambda ()
-               (evil-org-set-key-theme '(textobjects insert navigation shift todo))
-               (org-bullets-mode 1)))
-   #+END_SRC
-** Emacs Lisp Mode
-   #+BEGIN_SRC emacs-lisp
-   (add-hook 'emacs-lisp-mode-hook
-             (lambda ()
-               (enable-rainbow-delims)
-               (setq-local tab-width 2)
-               (setq-local evil-shift-width 2)))
-   #+END_SRC
+    (add-hook 'evil-org-mode-hook
+              (lambda ()
+                (evil-org-set-key-theme '(textobjects insert navigation shift todo))
+                (org-bullets-mode 1)))
+    #+END_SRC
+*** Emacs Lisp Mode
+    When we load an elisp file, turn on rainbow delims and set indent & evil shift widths to 2 spaces to match elisp-mode indent widths
+    #+BEGIN_SRC emacs-lisp
+    (add-hook 'emacs-lisp-mode-hook
+              (lambda ()
+                (rainbow-delimiters-mode)
+                (setq-local tab-width 2)
+                (setq-local evil-shift-width 2)))
+    #+END_SRC
 * Themes
 ** Mode line setup
     This mode line is pretty minimal. It's formatted as follows:
