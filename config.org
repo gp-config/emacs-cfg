@@ -122,6 +122,13 @@
             (set-face-attribute 'default nil :font nameAndSize :weight (intern weight))
             (add-to-list 'default-frame-alist `(font . ,nameAndSize))))
    #+END_SRC
+** Set Frame Title
+   Interactive function for setting frame title
+   #+BEGIN_SRC emacs-lisp
+   (defun gp-set-frame-title (&optional title) (interactive)
+          (let ((title (or title (read-from-minibuffer "New Frame Title: "))))
+            (setq frame-title-format title)))
+   #+END_SRC
 * Machine-specific Configuration
 ** Machine Setup: Unrecognized (fallback option)
    #+BEGIN_SRC emacs-lisp
@@ -161,7 +168,8 @@
    #+BEGIN_SRC emacs-lisp
    (defun gp-setup-machine-toshiba ()
      (defun gp-machine-set-font ()
-       (gp-set-font "Droid Sans Mono Dotted for Powerline" "11")))
+       ;; (gp-set-font "Droid Sans Mono Dotted for Powerline" "11")))
+       (gp-set-font "Hack" "11")))
    #+END_SRC
 ** Determine current machine
    Figure out which machine we're on and call the appropriate setup function.
@@ -551,8 +559,10 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
       (force-mode-line-update)
       (redraw-display))
     #+END_SRC
-*** Ivy and flx
-    Ivy, plus a tweak for the fuzzy finding behavior (using flx) of the ivy interface. More details can be found at https://oremacs.com/2016/01/06/ivy-flx/
+*** Ivy, flx tweak, ivy-rich
+    - ivy: Minibuffer completion framework
+    - flx: Used to tweak the ivy fuzzy finding behavior. More details can be found at https://oremacs.com/2016/01/06/ivy-flx/
+    - ivy-rich: A nicer looking =ivy-switch-buffer= display
     #+BEGIN_SRC emacs-lisp
     (use-package ivy
       :ensure t
@@ -563,7 +573,15 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
       (setq ivy-use-virtual-buffers t)
       (setq enable-recursive-minibuffers t)
       (setq ivy-re-builders-alist '((t . ivy--regex-fuzzy)))
-      (setq ivy-initial-inputs-alist nil))
+      (setq ivy-initial-inputs-alist nil)
+      (use-package ivy-rich
+        :ensure t
+        :defer t
+        :init
+        (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
+        (setq ivy-rich-path-style 'abbrev)
+        (setq ivy-virtual-abbreviate 'full
+              ivy-rich-switch-buffer-align-virtual-buffer t)))
     #+END_SRC
 *** Counsel
     Counsel provides some additional key bindings to common commands using =completing-read-function=, such as =find-file= (which becomes =counsel-find-file=)
