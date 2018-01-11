@@ -467,7 +467,8 @@
        ;; h d - HELP > DESCRIBE
        "hdv" 'describe-variable
        "hdf" 'describe-function
-       "hdk" 'describe-key))
+       "hdk" 'describe-key
+       "hda" 'counsel-describe-face))
     #+END_SRC
 *** Which key
     Set up mnemonics menu which appears after a short delay on pressing the configured evil leader key in an ivy minibuffer. Map descriptions to commands defined by General.
