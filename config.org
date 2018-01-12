@@ -676,6 +676,11 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
       :ensure t
       :defer t)
     #+END_SRC
+*** Magit
+    Git interface
+    #+BEGIN_SRC emacs-lisp
+    (use-package magit :ensure t :defer t)
+    #+END_SRC
 * Hooks
 ** Lifecycle Hooks
 *** Init
