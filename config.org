@@ -113,6 +113,28 @@
            (setq-local indent-tabs-mode nil)
            (setq-default indent-tabs-mode nil))
     #+END_SRC
+** Indentation widths
+   Set width of tabs, space indents, and evil mode shifts in the local buffer. Interactive command with a prompt.
+    #+BEGIN_SRC emacs-lisp
+    (defun gp-set-indent-width (&optional width) (interactive)
+           "Set tab width and evil-shift-width"
+           (let ((width (or width (read-from-minibuffer "Indent Width: " nil nil 'read))))
+             (unless (eq (mod width 2) 0)
+               (error "Arg is not a multiple of 2, indent width not set."))
+             ;; set tab stop width and width of evil shift commands
+             (setq-local tab-width width)
+             (setq-local evil-shift-width width)
+             ;; generate a sequence of numbers from 'width' to 120, with each increasing by 'width'
+             (setq-local tab-stop-list (number-sequence width 120 width))))
+    #+END_SRC
+
+    Switch to spaces mode
+    #+BEGIN_SRC emacs-lisp
+    (defun gp-indent-use-spaces () (interactive)
+           "Use spaces for indentation"
+           (setq-local indent-tabs-mode nil)
+           (setq-default indent-tabs-mode nil))
+    #+END_SRC
 ** Set Font
    #+BEGIN_SRC emacs-lisp
    (defun gp-set-font (name size &optional weight) (interactive)
@@ -680,6 +702,20 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
     Git interface
     #+BEGIN_SRC emacs-lisp
     (use-package magit :ensure t :defer t)
+    #+END_SRC
+*** Rainbow Mode
+    Replace the background of color codes with the color they represent
+    #+BEGIN_SRC emacs-lisp
+    (use-package rainbow-mode
+      :ensure t
+      :defer t
+      :config
+      (setq
+       rainbow-html-colors nil
+       rainbow-ansi-colors nil
+       rainbow-latex-colors nil
+       rainbow-r-colors nil
+       rainbow-x-colors nil))
     #+END_SRC
 * Hooks
 ** Lifecycle Hooks
