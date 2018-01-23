@@ -285,6 +285,16 @@
     (setq-default js-indent-level 4)
     #+END_SRC
     Tabs and evil mode shifts set to 2 spaces wide in certain modes (See =Mode Hooks= section)
+** Dynamic Abbrev Behavior
+   Change dabbrev (used by evil-complete-previous (C-p binding in insert mode)) behavior to;
+     - Not be case sensitive when searching for matches (typing in all lowercase will register matches that contain an uppercase letter)
+     - Be case sensitive when applying the match (if typed text is all lowercase but matches text with uppercase, when applying the match, the uppercase characters will be used)
+   #+BEGIN_SRC emacs-lisp
+   ;; ignore case when looking for matches
+   (setq-default dabbrev-case-fold-search case-fold-search)
+   ;; apply matched case when match is accepted
+   (setq-default dabbrev-case-replace nil)
+   #+END_SRC
 ** Braces, parens, quotes, etc
     Auto-close braces, parens, quotes, etc
     #+BEGIN_SRC emacs-lisp
