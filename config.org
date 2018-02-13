@@ -441,6 +441,8 @@
       ;; =============
       ;; GENERAL KEYS - VIM
       ;; =============
+      ;; first unbind comma leader key - this fixes some issues in terminal emacs
+      (general-def :states '(normal motion emacs) "," nil)
       (general-define-key
        :states '(normal motion emacs)
        :prefix ","
