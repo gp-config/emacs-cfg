@@ -550,7 +550,12 @@
     (use-package evil
       :ensure t
       :init (evil-mode 1)
-      :config (define-key evil-normal-state-map "," nil))
+      :config
+      (define-key evil-normal-state-map "," nil)
+      (evil-ex-define-cmd "W" "w")
+      (evil-ex-define-cmd "Wq" "wq")
+      (evil-ex-define-cmd "WQ" "wq")
+      (evil-ex-define-cmd "E" "e"))
     #+END_SRC
 **** Evil Escape
     Evil-escape lets us define an alternate key combo to enter normal mode. I like =kj=.
