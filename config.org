@@ -802,7 +802,7 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
 ** Load theme
    Only one of these should be enabled at a time; the rest should have the OFF todo status so tangle ignores them.
    
-*** Nimbostratus
+*** OFF Nimbostratus
     #+BEGIN_SRC emacs-lisp
     (load-theme 'nimbostratus t)
     #+END_SRC
@@ -814,7 +814,7 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
     #+BEGIN_SRC emacs-lisp
     (load-theme 'elegance t)
     #+END_SRC
-*** OFF @aatxe/awemacs
+*** gmacs
     #+BEGIN_SRC emacs-lisp
-    (load-theme 'awemacs t)
+    (load-theme 'gmacs t)
     #+END_SRC
