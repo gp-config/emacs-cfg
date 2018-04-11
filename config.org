@@ -127,14 +127,6 @@
              ;; generate a sequence of numbers from 'width' to 120, with each increasing by 'width'
              (setq-local tab-stop-list (number-sequence width 120 width))))
     #+END_SRC
-
-    Switch to spaces mode
-    #+BEGIN_SRC emacs-lisp
-    (defun gp-indent-use-spaces () (interactive)
-           "Use spaces for indentation"
-           (setq-local indent-tabs-mode nil)
-           (setq-default indent-tabs-mode nil))
-    #+END_SRC
 ** Set Font
    #+BEGIN_SRC emacs-lisp
    (defun gp-set-font (name size &optional weight) (interactive)
@@ -163,7 +155,6 @@
    (defun gp-setup-machine-desktop ()
      (defun gp-machine-set-font ()
        (gp-set-font "DejaVu Sans Mono" "11" "Medium")))
-       ;; (gp-set-font "Hack" "12")))
    #+END_SRC
 ** Machine Setup: MacBook Pro
    #+BEGIN_SRC emacs-lisp
