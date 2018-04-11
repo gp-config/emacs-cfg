@@ -162,8 +162,8 @@
    #+BEGIN_SRC emacs-lisp
    (defun gp-setup-machine-desktop ()
      (defun gp-machine-set-font ()
-       ;; (gp-set-font "Droid Sans Mono for Powerline" "11" "Medium")))
-       (gp-set-font "Hack" "12")))
+       (gp-set-font "DejaVu Sans Mono" "11" "Medium")))
+       ;; (gp-set-font "Hack" "12")))
    #+END_SRC
 ** Machine Setup: MacBook Pro
    #+BEGIN_SRC emacs-lisp
@@ -809,7 +809,12 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
     #+BEGIN_SRC emacs-lisp
     (load-theme 'elegance t)
     #+END_SRC
-*** gmacs
+*** OFF gmacs
     #+BEGIN_SRC emacs-lisp
     (load-theme 'gmacs t)
     #+END_SRC
+*** Nord
+    #+BEGIN_SRC emacs-lisp
+    (load-theme 'nord t)
+    #+END_SRC
+    
