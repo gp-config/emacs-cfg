@@ -286,6 +286,12 @@
    ;; apply matched case when match is accepted
    (setq-default dabbrev-case-replace nil)
    #+END_SRC
+** Word wrap / Line Truncating
+   Disable truncating lines and word wrap by default (Can be toggled using ,tw and ,tW)
+   #+BEGIN_SRC emacs-lisp
+   (setq-default truncate-lines t)
+   (setq-default word-wrap t)
+   #+END_SRC
 ** Braces, parens, quotes, etc
     Auto-close braces, parens, quotes, etc
     #+BEGIN_SRC emacs-lisp
@@ -473,6 +479,7 @@
        "tn" 'global-linum-mode
        "th" 'hl-line-mode
        "tw" 'toggle-truncate-lines
+       "tW" 'toggle-word-wrap
        "tm" 'hidden-mode-line-mode
        "ts" 'whitespace-mode
        "tis" 'gp-indent-use-spaces
