@@ -221,12 +221,12 @@
     (scroll-bar-mode -1)
     (menu-bar-mode -1)
     #+END_SRC
-*** OFF Line numbers
+*** Line numbers
     Enable line numbers, and add a bit of spacing around the number
     
     #+BEGIN_SRC emacs-lisp
     (global-linum-mode)
-    (defvar linum-format " %d ")
+    (setq linum-format " %d ")
     #+END_SRC
 *** OFF Highlight current line
     #+BEGIN_SRC emacs-lisp
@@ -808,7 +808,11 @@ A preview of each can be seen at http://spacemacs.org/doc/DOCUMENTATION.html#mod
     #+BEGIN_SRC emacs-lisp
     (load-theme 'gmacs t)
     #+END_SRC
-*** Nord
+*** gmacs-blue
+    #+BEGIN_SRC emacs-lisp
+    (load-theme 'gmacs-blue t)
+    #+END_SRC
+*** OFF Nord
     #+BEGIN_SRC emacs-lisp
     (load-theme 'nord t)
     #+END_SRC
