@@ -221,7 +221,7 @@
     (scroll-bar-mode -1)
     (menu-bar-mode -1)
     #+END_SRC
-*** Line numbers
+*** OFF Line numbers
     Enable line numbers, and add a bit of spacing around the number
     
     #+BEGIN_SRC emacs-lisp

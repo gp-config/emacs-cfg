@@ -26,12 +26,12 @@
    ((class color) (min-colors #xFF)))
 
   ;; purple
-  (gmacs-accent "#6959a6" nil)
-  (gmacs-accent-dark "3A238B" nil)
-  (gmacs-accent-light "#947FeF" nil)
-  (gmacs-accent-alt "#6F9830" nil)
-  (gmacs-accent-alt-dark "#788768" nil)
-  (gmacs-accent-alt-light "#7Fa840" nil)
+  ;; (gmacs-accent "#6959a6" nil)
+  ;; (gmacs-accent-dark "3A238B" nil)
+  ;; (gmacs-accent-light "#947FeF" nil)
+  ;; (gmacs-accent-alt "#6F9830" nil)
+  ;; (gmacs-accent-alt-dark "#788768" nil)
+  ;; (gmacs-accent-alt-light "#7Fa840" nil)
 
   ; COLOR BLOCKS BELOW AREN'T UPDATED FOR LIGHT THEME
 
@@ -52,12 +52,12 @@
   ;; (gmacs-accent-alt-dark "#3A238B" nil)
 
   ;; blue
-  ;; (gmacs-accent "#6f859f" nil)
-  ;; (gmacs-accent-dark "#687888" nil)
-  ;; (gmacs-accent-light "#58d6ff" nil)
-  ;; (gmacs-accent-alt "#a0f8fF" nil)
-  ;; (gmacs-accent-alt-dark "#687788" nil)
-  ;; (gmacs-accent-alt-light "#8FDFF3" nil)
+  (gmacs-accent "#0086b3" nil)
+  (gmacs-accent-dark "#0a5a75" nil)
+  (gmacs-accent-light "#4f97af" nil)
+  (gmacs-accent-alt "#a0f8fF" nil)
+  (gmacs-accent-alt-dark "#687788" nil)
+  (gmacs-accent-alt-light "#8FDFF3" nil)
 
   ;; gold
   ;; (gmacs-accent "#9C8C5F" nil)
@@ -69,14 +69,14 @@
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-  (gmacs-bg-primary "#eeeeee" nil)
+  (gmacs-bg-primary "#f9f9f9" nil)
   (gmacs-bg-primary-light "#ffffff")
   (gmacs-bg-primary-dark "#e4e4e4")
   (gmacs-bg-primary-verydark "#dddddd" nil)
 
   (gmacs-med-gray "#aaaaaa")
 
-  (gmacs-fg-primary "#444444" nil)
+  (gmacs-fg-primary "#333333" nil)
   (gmacs-fg-primary-darker "#535355" nil)
   (gmacs-fg-primary-lighter "#6a6a6a" nil)
 
@@ -116,7 +116,7 @@
 
   (fringe (:background gmacs-bg-primary))
   (hl-line (:background gmacs-bg-primary-verydark))
-  (region (:background gmacs-bg-primary-light :foreground gmacs-fg-primary-lighter))
+  (region (:background gmacs-bg-primary-dark :foreground gmacs-fg-primary-lighter))
   (secondary-selection (:background gmacs-bg-primary-verydark :foreground gmacs-accent))
   (minibuffer-prompt (:background gmacs-bg-primary :foreground gmacs-accent :bold t))
   (vertical-border (:foreground gmacs-bg-primary-verydark))
